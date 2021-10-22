@@ -26,7 +26,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
       color: Color(0xff33BDFF),
       child: MaterialButton(
         //minWidth: MediaQuery.of(context).size.width,
-        minWidth: 400,
+        minWidth:350,
         padding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
         onPressed: () {
           Navigator.push(
@@ -36,7 +36,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
         child: Text("Send Reset Link",
             textAlign: TextAlign.center,
             style: style.copyWith(
-                fontFamily:'ariel',fontSize: 23,color: Colors.white, fontWeight: FontWeight.bold)),
+                fontFamily:'ariel',fontSize: 19,color: Colors.white, fontWeight: FontWeight.bold)),
       ),
     );
 
@@ -78,7 +78,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                 child:Text(
                 'Forgot Password?',
                 style: TextStyle(
-                  fontSize: 40,
+                  fontSize: 30,
                   fontFamily: 'Poppins',
                 ),
 
@@ -98,7 +98,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                     "Enter the email address associated with this account. ",
                     style: TextStyle(
 
-                      fontSize: 17,
+                      fontSize: 14,
                       fontFamily: 'Poppins',
                       color: Color(0xff808080),
 
@@ -119,10 +119,14 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                     filled: true,
                     fillColor: Color(0xffDDF4FF),
                     labelText: "Email",
+                    labelStyle: TextStyle(
+
+                      fontSize: 16,
+                               ),
                     prefixIcon: Icon(
                       FontAwesomeIcons.solidEnvelope,
                       color: Colors.grey,
-                      size:22,
+                      size:19,
                     ),
                   ),
 
