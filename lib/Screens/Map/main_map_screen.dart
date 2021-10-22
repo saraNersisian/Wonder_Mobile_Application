@@ -49,7 +49,28 @@ class _MainMapScreenState extends State<MainMapScreen> {
             maxHeight: 300,
             panel:Center (
 
-                child: _buildTextField(),
+                child:Column(
+                  children:<Widget> [
+                    _buildTextField(),
+                  ElevatedButton(
+
+                    style: ElevatedButton.styleFrom(shape: new RoundedRectangleBorder(
+                      borderRadius: new BorderRadius.circular(24.0),
+
+                    ), ),
+
+                      onPressed: (){
+                  Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => MainMapScreen(title: 'main map page')),);
+                  },
+                      child: Text(
+                        "Post"
+                      ),
+                  )
+                  ],
+                )
+
               ),
 
             collapsed:
@@ -74,6 +95,7 @@ class _MainMapScreenState extends State<MainMapScreen> {
 
                   ),
                 ),
+
             borderRadius: radius,
             margin: const EdgeInsets.fromLTRB(30.0, 30.0, 30.0, 0.0),
             body: Scaffold(
@@ -87,13 +109,14 @@ class _MainMapScreenState extends State<MainMapScreen> {
         )
     );
   }
+
   Widget _buildTextField() {
     final maxLines = 5;
 
     return Container(
 
       margin: EdgeInsets.all(30),
-      height: maxLines * 40.0,
+      height: maxLines * 30.0,
 
       child: TextField(
         maxLines: maxLines,
