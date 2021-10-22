@@ -52,7 +52,7 @@ class _MainMapScreenState extends State<MainMapScreen> {
         ),
     collapsed: Container(
     decoration: BoxDecoration(
-    color: Color(0xff162E74),
+    color: Color(0xff22B4CF),
     borderRadius: radius
 
         ),
