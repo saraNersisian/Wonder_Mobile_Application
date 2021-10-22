@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-//import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:wonder_flutter/Screens/Forgot Password/forgot_password_screen.dart';
+import 'package:wonder_flutter/Screens/Map/main_map_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   LoginScreen({Key? key, required this.title}) : super(key: key);
@@ -12,10 +14,32 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-
+  TextStyle style = TextStyle(fontFamily: 'Montserrat', fontSize: 20.0);
 
   @override
   Widget build(BuildContext context) {
+
+
+    final loginButton = Material (
+      elevation: 5.0,
+      borderRadius: BorderRadius.circular(30.0),
+      color: Color(0xff33BDFF),
+      child: MaterialButton(
+        //minWidth: MediaQuery.of(context).size.width,
+        minWidth: 350,
+        padding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => MainMapScreen(title: 'main map page')),);
+        },
+        child: Text("Log In",
+            textAlign: TextAlign.center,
+            style: style.copyWith(
+                fontFamily:'ariel',fontSize: 23,color: Colors.white, fontWeight: FontWeight.bold)),
+      ),
+    );
+
     return Scaffold(
 
       // body: Container(
@@ -39,7 +63,9 @@ class _LoginScreenState extends State<LoginScreen> {
       //   ),
       //
       // ),
-      body:Column(
+      body:
+
+      Column(
 
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -67,12 +93,12 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                       filled: true,
                       fillColor: Color(0xffDDF4FF),
-                      labelText: "Email",
-                      // prefixIcon: Icon(
-                      //   FontAwesomeIcons.solidEnvelope,
-                      //   color: Colors.white,
-                      //   size:12,
-                      // ),
+                      labelText: "Username",
+                       prefixIcon: Icon(
+                         FontAwesomeIcons.user,
+                         color: Colors.grey,
+                         size:22,
+                       ),
                     ),
 
                   ),
@@ -91,15 +117,50 @@ class _LoginScreenState extends State<LoginScreen> {
                       filled: true,
                       fillColor: Color(0xffDDF4FF),
                       labelText: "Password",
+                      prefixIcon: Icon(
+                        FontAwesomeIcons.key,
+                        color: Colors.grey,
+                        size:22,
+                      ),
 
                     ),
                   ),
 
-
                 ),
+
+                Container(
+                  //margin: EdgeInsets.only(right:100.0) ,
+                  width: 400.0,
+                  height: 30.0,
+                alignment: Alignment.centerRight,
+                child:
+                  TextButton(
+
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => ForgotPasswordScreen(title: 'Forgot Password Page')),);
+                    },
+                    child:
+                    const Text(
+                      'Forgot Password?',
+                      style: TextStyle(
+                        color: Color(0xff808080),
+                        fontSize: 14,
+                        //fontFamily: 'Poppins',
+                      ),
+                    ),
+                  ),
+              ),
 
               ],
           ),
+
+          SizedBox(
+            height: 50.0,
+          ),
+          loginButton,
+
 
         ],
 

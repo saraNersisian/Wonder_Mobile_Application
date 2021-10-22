@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:wonder_flutter/Screens/Login/login_screen.dart';
 import 'package:wonder_flutter/Screens/Sign up/signup_screen.dart';
+import 'package:wonder_flutter/size_config.dart';
 
 void main() {
   runApp(MyApp());
@@ -38,6 +39,12 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    //SizeConfig().init(context); //for the screen sizing
+
+    // child: Container(
+    //   height: SizeConfig.safeBlockVertical * 25,
+    //   width: SizeConfig.safeBlockHorizontal * 55,
+    // );
 
     final loginButton = Material (
       elevation: 5.0,
@@ -45,8 +52,8 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
       color: Color(0xff33BDFF),
       child: MaterialButton(
         //minWidth: MediaQuery.of(context).size.width,
-        minWidth: 400,
-        padding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
+        minWidth: 350,
+        padding: EdgeInsets.fromLTRB(10.0, 15.0, 15.0, 15.0),
         onPressed: () {
           Navigator.push(
             context,
@@ -55,7 +62,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
         child: Text("Sign In",
             textAlign: TextAlign.center,
             style: style.copyWith(
-                fontFamily:'poppins',fontSize: 20,color: Colors.white, fontWeight: FontWeight.bold)),
+                fontFamily:'ariel',fontSize: 19,color: Colors.white, fontWeight: FontWeight.bold)),
       ),
     );
 
@@ -65,7 +72,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
       //color: Color(0xff01A0C7),
       color: Color(0xff33BDFF),
       child: MaterialButton(
-        minWidth: 400,
+        minWidth: 350,
         padding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
         onPressed: () {
           Navigator.push(
@@ -75,16 +82,17 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
         child: Text("Sign Up",
             textAlign: TextAlign.center,
             style: style.copyWith(
-                fontFamily:'poppins',fontSize: 20,color: Colors.white, fontWeight: FontWeight.bold)),
+                fontFamily:'ariel',fontSize: 19,color: Colors.white, fontWeight: FontWeight.bold)),
       ),
 
     );
 
     return Scaffold(
-      body:
+        resizeToAvoidBottomInset : false,
+      body: SingleChildScrollView(
 
-      Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      child: Row(
+       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           Column(
 
@@ -92,7 +100,9 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
             crossAxisAlignment: CrossAxisAlignment.center,
 
             children: [
-
+              SizedBox(
+                height: 80.0,
+              ),
               Text(
                 'W',
                 style: TextStyle(
@@ -127,6 +137,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
           ),
         ], //row children
       ),
+    )
     );
   }
 }
