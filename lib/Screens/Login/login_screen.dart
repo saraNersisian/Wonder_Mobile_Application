@@ -36,7 +36,7 @@ class _LoginScreenState extends State<LoginScreen> {
         child: Text("Log In",
             textAlign: TextAlign.center,
             style: style.copyWith(
-                fontFamily:'ariel',fontSize: 23,color: Colors.white, fontWeight: FontWeight.bold)),
+                fontFamily:'ariel',fontSize: 19,color: Colors.white, fontWeight: FontWeight.bold)),
       ),
     );
 
