@@ -27,6 +27,21 @@ class _MainMapScreenState extends State<MainMapScreen> {
   static final CameraPosition _kInitialPosition =
   CameraPosition(target: _kMapCenter, zoom: 11.0, tilt: 0, bearing: 0);
 
+  Set<Marker> _markers = {};
+
+  void _onMapCreated(GoogleMapController controller){
+    setState(() {
+      _markers.add(
+        Marker(
+            markerId: MarkerId("id_1"),
+        position: _kMapCenter,
+        infoWindow: InfoWindow(
+          title: "Where is ralph?"
+        ),
+        ),
+      );
+    });
+  }
   @override
   Widget build(BuildContext context) {
     // return Scaffold(
@@ -117,7 +132,7 @@ class _MainMapScreenState extends State<MainMapScreen> {
     return Container(
 
       margin: EdgeInsets.all(30),
-      height: maxLines * 30.0,
+      height: maxLines * 20.0,
 
       child: TextField(
         maxLines: maxLines,

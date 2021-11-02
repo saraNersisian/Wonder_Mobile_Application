@@ -1,8 +1,10 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/material/text_button.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:wonder_flutter/Screens/Login/login_screen.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:commons/commons.dart';
 
 class SignUpScreen extends StatefulWidget {
   SignUpScreen({Key? key, required this.title}) : super(key: key);
@@ -15,8 +17,10 @@ class SignUpScreen extends StatefulWidget {
 }
 
 class _SignUpScreenState extends State<SignUpScreen> {
-  TextStyle style = TextStyle(fontFamily: 'Montserrat', fontSize: 20.0);
+  TextStyle style = TextStyle(fontFamily: 'Montserrat', fontSize: 17.0);
 
+  var emailController = TextEditingController();
+  var passwordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -30,9 +34,38 @@ class _SignUpScreenState extends State<SignUpScreen> {
         minWidth: 350,
         padding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
         onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) =>LoginScreen(title: 'My Login Page')),);
+          //firebase authentication
+          FirebaseAuth.instance.createUserWithEmailAndPassword(
+              email: emailController.text, password: passwordController.text)
+          .then((value) {
+            print("Successfully signed up!");
+
+            successDialog(
+              context,
+              "Account created successfully!",
+              //negativeText: "Try Again",
+              //negativeAction: () {},
+              positiveText: "LOGIN",
+              positiveAction: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) =>LoginScreen(title: 'My Login Page')),);
+              },
+            );
+
+
+
+
+           // Navigator.pop(context);
+          }).catchError((error){
+            print("Failed to sign up!");
+            print(error.toString());
+          });
+
+    // Navigator.push(
+    // context,
+    // MaterialPageRoute(builder: (context) =>LoginScreen(title: 'My Login Page')),);},
+
         },
         child: Text("Create Account",
             textAlign: TextAlign.center,
@@ -55,43 +88,44 @@ class _SignUpScreenState extends State<SignUpScreen> {
           Column(
             children: [
               SizedBox(
-                height: 80.0,
+                height: 60.0,
               ),
               Text(
                 'Sign Up',
                  style: TextStyle(
-                  fontSize: 50,
+                  fontSize: 40,
                   fontFamily: 'Poppins',
                 ),
               ),
              SizedBox(
-                   height: 50.0,
+                   height: 40.0,
                  ),
+              // Container(
+              //   margin: EdgeInsets.only(left: 35, right: 35, bottom: 10, top: 5),
+              //   child:
+              //   TextField(
+              //     decoration: InputDecoration(
+              //       border: OutlineInputBorder(
+              //         borderRadius: BorderRadius.circular(20.0),
+              //         borderSide: BorderSide.none,
+              //       ),
+              //       filled: true,
+              //       fillColor: Color(0xffffeec5),
+              //       labelText: "Username",
+              //       // prefixIcon: Icon(
+              //       //   FontAwesomeIcons.solidEnvelope,
+              //       //   color: Colors.grey,
+              //       //   size:22,
+              //       // ),
+              //     ),
+              //
+              //   ),
+              // ),
               Container(
-                margin: EdgeInsets.only(left: 35, right: 35, bottom: 10, top: 10),
+                margin: EdgeInsets.only(left: 35, right: 35, bottom: 10, top: 5),
                 child:
                 TextField(
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(20.0),
-                      borderSide: BorderSide.none,
-                    ),
-                    filled: true,
-                    fillColor: Color(0xffffeec5),
-                    labelText: "Username",
-                    // prefixIcon: Icon(
-                    //   FontAwesomeIcons.solidEnvelope,
-                    //   color: Colors.grey,
-                    //   size:22,
-                    // ),
-                  ),
-
-                ),
-              ),
-              Container(
-                margin: EdgeInsets.only(left: 35, right: 35, bottom: 10, top: 10),
-                child:
-                TextField(
+                  controller: emailController,
                   decoration: InputDecoration(
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(20.0),
@@ -110,9 +144,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 ),
               ),
               Container(
-                margin: EdgeInsets.only(left: 35, right: 35, bottom: 10, top: 10),
+                margin: EdgeInsets.only(left: 35, right: 35, bottom: 10, top: 5),
                 child:
                 TextField(
+                  obscureText: true,
+                  controller: passwordController,
                   decoration: InputDecoration(
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(20.0),
@@ -130,9 +166,31 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
                 ),
               ),
+              // Container(
+              //   margin: EdgeInsets.only(left: 35, right: 35, bottom: 10, top: 5),
+              //   child:
+              //   TextField(
+              //     decoration: InputDecoration(
+              //       border: OutlineInputBorder(
+              //         borderRadius: BorderRadius.circular(20.0),
+              //         borderSide: BorderSide.none,
+              //       ),
+              //       filled: true,
+              //       fillColor: Color(0xffffeec5),
+              //       labelText: "Phone Number",
+              //       // prefixIcon: Icon(
+              //       //   FontAwesomeIcons.solidEnvelope,
+              //       //   color: Colors.grey,
+              //       //   size:22,
+              //       // ),
+              //     ),
+              //
+              //   ),
+              // ),
               Container(
-                margin: EdgeInsets.only(left: 35, right: 35, bottom: 10, top: 10),
+                margin: EdgeInsets.only(left: 35, right: 35, bottom: 0, top: 5),
                 child:
+
                 TextField(
                   decoration: InputDecoration(
                     border: OutlineInputBorder(
@@ -141,29 +199,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     ),
                     filled: true,
                     fillColor: Color(0xffffeec5),
-                    labelText: "Phone Number",
-                    // prefixIcon: Icon(
-                    //   FontAwesomeIcons.solidEnvelope,
-                    //   color: Colors.grey,
-                    //   size:22,
-                    // ),
-                  ),
-
-                ),
-              ),
-              Container(
-                margin: EdgeInsets.only(left: 35, right: 35, bottom: 0, top: 10),
-                child:
-
-                TextField(
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(20.0),
-                      borderSide: BorderSide.none,
-                    ),
-                    filled: true,
-                    fillColor: Color(0xffffeec5),
-                    labelText: "Address",
+                    labelText: "Zip code",
                     // prefixIcon: Icon(
                     //   FontAwesomeIcons.solidEnvelope,
                     //   color: Colors.grey,
@@ -175,7 +211,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
               ),
               SizedBox(
-                height: 80.0,
+                height: 70.0,
               ),
               Container(
                 child:

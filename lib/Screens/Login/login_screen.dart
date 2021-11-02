@@ -1,8 +1,9 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:wonder_flutter/Screens/Forgot Password/forgot_password_screen.dart';
 import 'package:wonder_flutter/Screens/Map/main_map_screen.dart';
-import 'package:firebase_database/firebase_database.dart';
+import 'package:commons/commons.dart';
 
 class LoginScreen extends StatefulWidget {
   LoginScreen({Key? key, required this.title}) : super(key: key);
@@ -10,12 +11,16 @@ class LoginScreen extends StatefulWidget {
 
   final String title;
 
+
   @override
   _LoginScreenState createState() => _LoginScreenState();
 }
 
 class _LoginScreenState extends State<LoginScreen> {
   TextStyle style = TextStyle(fontFamily: 'Montserrat', fontSize: 20.0);
+
+  var emailController = TextEditingController();
+  var passwordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -30,10 +35,27 @@ class _LoginScreenState extends State<LoginScreen> {
         minWidth: 350,
         padding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
         onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => MainMapScreen(title: 'main map page')),);
-        },
+          FirebaseAuth.instance.signInWithEmailAndPassword(
+              email: emailController.text, password: passwordController.text)
+          .then((value){
+              print("Login successfully!");
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => MainMapScreen(title: 'main map page')),);
+          }).catchError((error){
+            //print("Login Failed!");
+            errorDialog(
+                        context,
+                        "Wrong Email/Password ",
+                        // negativeText: "Try Again",
+                        // negativeAction: () {},
+                    // positiveText: "Details",
+                   // positiveAction: () {},
+                    //print(error.toString());
+                );
+              }
+              );
+          },
         child: Text("Log In",
             textAlign: TextAlign.center,
             style: style.copyWith(
@@ -81,12 +103,13 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                 ),
                 SizedBox(
-                  height: 150.0,
+                  height: 100.0,
                 ),
                 Container(
                   margin: EdgeInsets.only(left: 35, right: 35, bottom: 10, top: 10),
                   child:
                   TextField(
+                    controller: emailController,
                     decoration: InputDecoration(
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(20.0),
@@ -94,7 +117,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                       filled: true,
                       fillColor: Color(0xffDDF4FF),
-                      labelText: "Username",
+                      labelText: "Email",
                        prefixIcon: Icon(
                          FontAwesomeIcons.user,
                          color: Colors.grey,
@@ -109,6 +132,8 @@ class _LoginScreenState extends State<LoginScreen> {
                   margin: EdgeInsets.only(left: 35, right: 35, bottom: 10, top: 10),
                   child:
                   TextField(
+                    controller: passwordController,
+                    obscureText: true, // to hide password
                     decoration: InputDecoration(
 
                       border: OutlineInputBorder(
@@ -116,6 +141,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         borderSide: BorderSide.none,
                       ),
                       filled: true,
+
                       fillColor: Color(0xffDDF4FF),
                       labelText: "Password",
                       prefixIcon: Icon(
@@ -132,7 +158,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 Container(
                   //margin: EdgeInsets.only(right:100.0) ,
                   width: 400.0,
-                  height: 30.0,
+                  height: 40.0,
                 alignment: Alignment.centerRight,
                 child:
                   TextButton(
