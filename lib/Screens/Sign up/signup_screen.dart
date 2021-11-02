@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/material/text_button.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:wonder_flutter/Screens/Login/login_screen.dart';
+import 'package:firebase_database/firebase_database.dart';
 
 class SignUpScreen extends StatefulWidget {
   SignUpScreen({Key? key, required this.title}) : super(key: key);
