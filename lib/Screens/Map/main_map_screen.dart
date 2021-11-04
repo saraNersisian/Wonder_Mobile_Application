@@ -134,7 +134,7 @@ class _MainMapScreenState extends State<MainMapScreen> {
                 onPressed: (){
                   Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => chatScreen(title: 'Forgot Password Page')),);
+                  MaterialPageRoute(builder: (context) => ChatScreen(title: 'Chat page')),);
                   },
 
 

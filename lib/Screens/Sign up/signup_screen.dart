@@ -6,7 +6,7 @@ import 'package:flutter/src/material/text_button.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:wonder_flutter/Screens/Login/login_screen.dart';
 import 'package:firebase_database/firebase_database.dart';
-import 'package:commons/commons.dart';
+//import 'package:commons/commons.dart';
 
 class SignUpScreen extends StatefulWidget {
   SignUpScreen({Key? key, required this.title}) : super(key: key);
@@ -63,18 +63,18 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
             });
 
-            successDialog(
-              context,
-              "Account created successfully!",
-              //negativeText: "Try Again",
-              //negativeAction: () {},
-              positiveText: "LOGIN",
-              positiveAction: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) =>LoginScreen(title: 'My Login Page')),);
-              },
-            );
+            // successDialog(
+            //   context,
+            //   "Account created successfully!",
+            //   //negativeText: "Try Again",
+            //   //negativeAction: () {},
+            //   positiveText: "LOGIN",
+            //   positiveAction: () {
+            //     Navigator.push(
+            //         context,
+            //         MaterialPageRoute(builder: (context) =>LoginScreen(title: 'My Login Page')),);
+            //   },
+            // );
 
            // Navigator.pop(context);
           }).catchError((error){
