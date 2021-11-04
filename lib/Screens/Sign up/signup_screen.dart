@@ -1,3 +1,5 @@
+
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/material/text_button.dart';
@@ -21,6 +23,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   var emailController = TextEditingController();
   var passwordController = TextEditingController();
+  var usernameController = TextEditingController();
+  var phoneNumberController = TextEditingController();
+  var zipCodeController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -37,8 +42,26 @@ class _SignUpScreenState extends State<SignUpScreen> {
           //firebase authentication
           FirebaseAuth.instance.createUserWithEmailAndPassword(
               email: emailController.text, password: passwordController.text)
-          .then((value) {
-            print("Successfully signed up!");
+          .then((authResult) {
+            print("Successfully signed up! UID: " + authResult.user.uid.toString());
+
+            var userProfile = {
+              'uid': authResult.user.uid,
+              'username': usernameController.text,
+              'email': emailController.text,
+              'phone': phoneNumberController.text,
+              'zipcode': zipCodeController.text,
+
+            };
+
+          FirebaseDatabase.instance.reference().child("users/" + authResult.user.uid)
+            .set(userProfile)
+            .then((value){
+              print("Successfully created the profile info ");
+             }).catchError((error) {
+            print("Faile!");
+
+            });
 
             successDialog(
               context,
@@ -52,9 +75,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     MaterialPageRoute(builder: (context) =>LoginScreen(title: 'My Login Page')),);
               },
             );
-
-
-
 
            // Navigator.pop(context);
           }).catchError((error){
@@ -77,173 +97,176 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
     return
         Scaffold(
-        resizeToAvoidBottomInset : false,
+        //resizeToAvoidBottomInset : false,
         body: SingleChildScrollView(
+          child: ConstrainedBox(
+            constraints: BoxConstraints(maxHeight: MediaQuery.of(context).size.height),
+            child: Column(
 
-
-      child: Column(
-
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Column(
-            children: [
-              SizedBox(
-                height: 60.0,
-              ),
-              Text(
-                'Sign Up',
-                 style: TextStyle(
-                  fontSize: 40,
-                  fontFamily: 'Poppins',
-                ),
-              ),
-             SizedBox(
-                   height: 40.0,
-                 ),
-              // Container(
-              //   margin: EdgeInsets.only(left: 35, right: 35, bottom: 10, top: 5),
-              //   child:
-              //   TextField(
-              //     decoration: InputDecoration(
-              //       border: OutlineInputBorder(
-              //         borderRadius: BorderRadius.circular(20.0),
-              //         borderSide: BorderSide.none,
-              //       ),
-              //       filled: true,
-              //       fillColor: Color(0xffffeec5),
-              //       labelText: "Username",
-              //       // prefixIcon: Icon(
-              //       //   FontAwesomeIcons.solidEnvelope,
-              //       //   color: Colors.grey,
-              //       //   size:22,
-              //       // ),
-              //     ),
-              //
-              //   ),
-              // ),
-              Container(
-                margin: EdgeInsets.only(left: 35, right: 35, bottom: 10, top: 5),
-                child:
-                TextField(
-                  controller: emailController,
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(20.0),
-                      borderSide: BorderSide.none,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Column(
+                  children: [
+                    SizedBox(
+                      height: 80.0,
                     ),
-                    filled: true,
-                    fillColor: Color(0xffffeec5),
-                    labelText: "Email",
-                    // prefixIcon: Icon(
-                    //   FontAwesomeIcons.solidEnvelope,
-                    //   color: Colors.grey,
-                    //   size:22,
-                    // ),
-                  ),
-
-                ),
-              ),
-              Container(
-                margin: EdgeInsets.only(left: 35, right: 35, bottom: 10, top: 5),
-                child:
-                TextField(
-                  obscureText: true,
-                  controller: passwordController,
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(20.0),
-                      borderSide: BorderSide.none,
+                    Text(
+                      'Sign Up',
+                      style: TextStyle(
+                        fontSize: 40,
+                        fontFamily: 'Poppins',
+                      ),
                     ),
-                    filled: true,
-                    fillColor: Color(0xffffeec5),
-                    labelText: "Password",
-                    // prefixIcon: Icon(
-                    //   FontAwesomeIcons.solidEnvelope,
-                    //   color: Colors.grey,
-                    //   size:22,
-                    // ),
-                  ),
-
-                ),
-              ),
-              // Container(
-              //   margin: EdgeInsets.only(left: 35, right: 35, bottom: 10, top: 5),
-              //   child:
-              //   TextField(
-              //     decoration: InputDecoration(
-              //       border: OutlineInputBorder(
-              //         borderRadius: BorderRadius.circular(20.0),
-              //         borderSide: BorderSide.none,
-              //       ),
-              //       filled: true,
-              //       fillColor: Color(0xffffeec5),
-              //       labelText: "Phone Number",
-              //       // prefixIcon: Icon(
-              //       //   FontAwesomeIcons.solidEnvelope,
-              //       //   color: Colors.grey,
-              //       //   size:22,
-              //       // ),
-              //     ),
-              //
-              //   ),
-              // ),
-              Container(
-                margin: EdgeInsets.only(left: 35, right: 35, bottom: 0, top: 5),
-                child:
-
-                TextField(
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(20.0),
-                      borderSide: BorderSide.none,
+                    SizedBox(
+                      height: 80.0,
                     ),
-                    filled: true,
-                    fillColor: Color(0xffffeec5),
-                    labelText: "Zip code",
-                    // prefixIcon: Icon(
-                    //   FontAwesomeIcons.solidEnvelope,
-                    //   color: Colors.grey,
-                    //   size:22,
-                    // ),
-                  ),
+                    Container(
+                      margin: EdgeInsets.only(left: 35, right: 35, bottom: 10, top: 5),
+                      child:
+                      TextField(
+                        controller: usernameController,
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(20.0),
+                            borderSide: BorderSide.none,
+                          ),
+                          filled: true,
+                          fillColor: Color(0xffffeec5),
+                          labelText: "Username",
+                          // prefixIcon: Icon(
+                          //   FontAwesomeIcons.solidEnvelope,
+                          //   color: Colors.grey,
+                          //   size:22,
+                          // ),
+                        ),
 
-                ),
+                      ),
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(left: 35, right: 35, bottom: 10, top: 5),
+                      child:
+                      TextField(
+                        controller: emailController,
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(20.0),
+                            borderSide: BorderSide.none,
+                          ),
+                          filled: true,
+                          fillColor: Color(0xffffeec5),
+                          labelText: "Email",
+                          // prefixIcon: Icon(
+                          //   FontAwesomeIcons.solidEnvelope,
+                          //   color: Colors.grey,
+                          //   size:22,
+                          // ),
+                        ),
 
-              ),
-              SizedBox(
-                height: 70.0,
-              ),
-              Container(
-                child:
-                SignUpButton,
-              ),
+                      ),
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(left: 35, right: 35, bottom: 10, top: 5),
+                      child:
+                      TextField(
+                        obscureText: true,
+                        controller: passwordController,
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(20.0),
+                            borderSide: BorderSide.none,
+                          ),
+                          filled: true,
+                          fillColor: Color(0xffffeec5),
+                          labelText: "Password",
+                          // prefixIcon: Icon(
+                          //   FontAwesomeIcons.solidEnvelope,
+                          //   color: Colors.grey,
+                          //   size:22,
+                          // ),
+                        ),
+
+                      ),
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(left: 35, right: 35, bottom: 10, top: 5),
+                      child:
+                      TextField(
+                        controller: phoneNumberController,
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(20.0),
+                            borderSide: BorderSide.none,
+                          ),
+                          filled: true,
+                          fillColor: Color(0xffffeec5),
+                          labelText: "Phone Number",
+                          // prefixIcon: Icon(
+                          //   FontAwesomeIcons.solidEnvelope,
+                          //   color: Colors.grey,
+                          //   size:22,
+                          // ),
+                        ),
+
+                      ),
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(left: 35, right: 35, bottom: 0, top: 5),
+                      child:
+
+                      TextField(
+                        controller: zipCodeController,
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(20.0),
+                            borderSide: BorderSide.none,
+                          ),
+                          filled: true,
+                          fillColor: Color(0xffffeec5),
+                          labelText: "Zip Code",
+                          // prefixIcon: Icon(
+                          //   FontAwesomeIcons.solidEnvelope,
+                          //   color: Colors.grey,
+                          //   size:22,
+                          // ),
+                        ),
+
+                      ),
+
+                    ),
+                    SizedBox(
+                      height: 70.0,
+                    ),
+                    Container(
+                      child:
+                      SignUpButton,
+                    ),
 
                     Row(
 
                       mainAxisAlignment: MainAxisAlignment.start,
                       children:  <Widget>[
                         //Expanded(
-                          //flex: 2,
+                        //flex: 2,
 
 
-                          Container(
+                        Container(
 
-                            padding: EdgeInsets.fromLTRB(130,9,0,10),
-                            child:
-                            Text(
+                          padding: EdgeInsets.fromLTRB(130,9,0,10),
+                          child:
+                          Text(
 
-                              "Already have an account ?",
-                             // textAlign: TextAlign.left,
-                              style: TextStyle(
-                                fontSize: 14,
-                                fontFamily: 'Poppins',
-                              ),
+                            "Already have an account ?",
+                            // textAlign: TextAlign.left,
+                            style: TextStyle(
+                              fontSize: 14,
+                              fontFamily: 'Poppins',
                             ),
                           ),
+                        ),
 
-                       // ),
-                      Expanded(
-                        flex: 0,
+                        // ),
+                        Expanded(
+                          flex: 0,
 
                           child:
                           TextButton(
@@ -255,33 +278,27 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             },
                             child:
                             const Text(
-                                'LOG IN',
-                                  style: TextStyle(
-                                  color: Color(0xff33BDFF),
-                                  fontSize: 14,
-                                  //fontFamily: 'Poppins',
+                              'LOG IN',
+                              style: TextStyle(
+                                color: Color(0xff33BDFF),
+                                fontSize: 14,
+                                //fontFamily: 'Poppins',
                               ),
                             ),
                           ),
-                      ),
+                        ),
                       ],
-
-
-
-
                     ),
 
+                  ],
+                ),
+
+              ],
+
+            ),
+          )
 
 
-
-            ],
-          ),
-
-        ],
-
-
-
-    ),
     ),
         );
   }

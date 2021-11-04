@@ -27,21 +27,21 @@ class _MainMapScreenState extends State<MainMapScreen> {
   static final CameraPosition _kInitialPosition =
   CameraPosition(target: _kMapCenter, zoom: 11.0, tilt: 0, bearing: 0);
 
-  Set<Marker> _markers = {};
-
-  void _onMapCreated(GoogleMapController controller){
-    setState(() {
-      _markers.add(
-        Marker(
-            markerId: MarkerId("id_1"),
-        position: _kMapCenter,
-        infoWindow: InfoWindow(
-          title: "Where is ralph?"
-        ),
-        ),
-      );
-    });
-  }
+  // Set<Marker> _markers = {};
+  //
+  // void _onMapCreated(GoogleMapController controller){
+  //   setState(() {
+  //     _markers.add(
+  //       Marker(
+  //           markerId: MarkerId("id_1"),
+  //       position: _kMapCenter,
+  //       infoWindow: InfoWindow(
+  //         title: "Where is xyz?"
+  //       ),
+  //       ),
+  //     );
+  //   });
+  // }
   @override
   Widget build(BuildContext context) {
     // return Scaffold(
@@ -54,13 +54,18 @@ class _MainMapScreenState extends State<MainMapScreen> {
     //
     // );
     BorderRadiusGeometry radius = BorderRadius.only(
-      topLeft: Radius.circular(24.0),
-      topRight: Radius.circular(24.0),
+      topLeft: Radius.circular(100.0),
+      topRight: Radius.circular(100.0),
 
     );
 
     return Material(
-        child: SlidingUpPanel(
+
+
+    child: Column(
+
+       children:[
+         SlidingUpPanel(
             backdropEnabled: true,
             maxHeight: 300,
             panel:Center (
@@ -71,7 +76,8 @@ class _MainMapScreenState extends State<MainMapScreen> {
                   ElevatedButton(
 
                     style: ElevatedButton.styleFrom(shape: new RoundedRectangleBorder(
-                      borderRadius: new BorderRadius.circular(24.0),
+                      borderRadius: new BorderRadius.circular(30.0),
+
 
                     ), ),
 
@@ -92,7 +98,7 @@ class _MainMapScreenState extends State<MainMapScreen> {
             collapsed:
             Container(
                   decoration: BoxDecoration(
-                    color: Color(0xff22B4CF),
+                    color: Color(0xff4CA3DD),
                     borderRadius: radius,
                   ),
 
@@ -114,6 +120,7 @@ class _MainMapScreenState extends State<MainMapScreen> {
 
             borderRadius: radius,
             margin: const EdgeInsets.fromLTRB(30.0, 30.0, 30.0, 0.0),
+
             body: Scaffold(
               body: GoogleMap(
                 initialCameraPosition: _kInitialPosition,
@@ -121,8 +128,20 @@ class _MainMapScreenState extends State<MainMapScreen> {
               // appBar: AppBar(
               //     title: Text('Google Maps Demo'),
               //   ),
+
+              floatingActionButton: FloatingActionButton(
+                onPressed: (){
+
+                },
+                child: const Icon(Icons.chat),
+                backgroundColor: Color(0xffC27BA0),
+              ),
+
+
             )
         )
+],
+    ),
     );
   }
 
@@ -132,7 +151,7 @@ class _MainMapScreenState extends State<MainMapScreen> {
     return Container(
 
       margin: EdgeInsets.all(30),
-      height: maxLines * 20.0,
+      height: maxLines * 30.0,
 
       child: TextField(
         maxLines: maxLines,

@@ -64,10 +64,15 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
       //   ),
       //
       // ),
-      body:
+        body: SingleChildScrollView(
+        //to make the page fit great
+        child: ConstrainedBox(
+        constraints: BoxConstraints(maxHeight: MediaQuery.of(context).size.height),
 
 
-      Column(
+
+
+      child: Column(
         //mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -141,17 +146,14 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
           ),
 
               SendRestLinkButton,
-
-
         ],
-
-
-
     ),
 
     ],
 
       ),
+        ),
+        ),
     );
   }
 }

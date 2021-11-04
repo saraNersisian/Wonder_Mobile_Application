@@ -86,115 +86,125 @@ class _LoginScreenState extends State<LoginScreen> {
       //   ),
       //
       // ),
-      body:
+        body: SingleChildScrollView(
+          //to make the page fit great
+            child: ConstrainedBox(
+            constraints: BoxConstraints(maxHeight: MediaQuery.of(context).size.height),
 
-      Column(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
 
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
           Column(
-              children: [
 
-                Text(
-                  'Login',
-                  style: TextStyle(
-                    fontSize: 50,
-                    fontFamily: 'Poppins',
-                  ),
-                ),
-                SizedBox(
-                  height: 100.0,
-                ),
-                Container(
-                  margin: EdgeInsets.only(left: 35, right: 35, bottom: 10, top: 10),
-                  child:
-                  TextField(
-                    controller: emailController,
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(20.0),
-                        borderSide: BorderSide.none,
-                      ),
-                      filled: true,
-                      fillColor: Color(0xffDDF4FF),
-                      labelText: "Email",
-                       prefixIcon: Icon(
-                         FontAwesomeIcons.user,
-                         color: Colors.grey,
-                         size:22,
-                       ),
-                    ),
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Column(
+                  children: [
 
-                  ),
-                ),
-
-                Container(
-                  margin: EdgeInsets.only(left: 35, right: 35, bottom: 10, top: 10),
-                  child:
-                  TextField(
-                    controller: passwordController,
-                    obscureText: true, // to hide password
-                    decoration: InputDecoration(
-
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(20.0),
-                        borderSide: BorderSide.none,
-                      ),
-                      filled: true,
-
-                      fillColor: Color(0xffDDF4FF),
-                      labelText: "Password",
-                      prefixIcon: Icon(
-                        FontAwesomeIcons.key,
-                        color: Colors.grey,
-                        size:22,
-                      ),
-
-                    ),
-                  ),
-
-                ),
-
-                Container(
-                  //margin: EdgeInsets.only(right:100.0) ,
-                  width: 400.0,
-                  height: 40.0,
-                alignment: Alignment.centerRight,
-                child:
-                  TextButton(
-
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => ForgotPasswordScreen(title: 'Forgot Password Page')),);
-                    },
-                    child:
-                    const Text(
-                      'Forgot Password?',
+                    Text(
+                      'Login',
                       style: TextStyle(
-                        color: Color(0xff808080),
-                        fontSize: 14,
-                        //fontFamily: 'Poppins',
+                        fontSize: 50,
+                        fontFamily: 'Poppins',
                       ),
                     ),
+                    SizedBox(
+                      height: 100.0,
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(left: 35, right: 35, bottom: 10, top: 10),
+                      child:
+                      TextField(
+                        controller: emailController,
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(20.0),
+                            borderSide: BorderSide.none,
+                          ),
+                          filled: true,
+                          fillColor: Color(0xffDDF4FF),
+                          labelText: "Email",
+                           prefixIcon: Icon(
+                             FontAwesomeIcons.user,
+                             color: Colors.grey,
+                             size:22,
+                           ),
+                        ),
+
+                      ),
+                    ),
+
+                    Container(
+                      margin: EdgeInsets.only(left: 35, right: 35, bottom: 10, top: 10),
+                      child:
+                      TextField(
+                        controller: passwordController,
+                        obscureText: true, // to hide password
+                        decoration: InputDecoration(
+
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(20.0),
+                            borderSide: BorderSide.none,
+                          ),
+                          filled: true,
+
+                          fillColor: Color(0xffDDF4FF),
+                          labelText: "Password",
+                          prefixIcon: Icon(
+                            FontAwesomeIcons.key,
+                            color: Colors.grey,
+                            size:22,
+                          ),
+
+                        ),
+                      ),
+
+                    ),
+
+                    Container(
+                      //margin: EdgeInsets.only(right:100.0) ,
+                      width: 400.0,
+                      height: 40.0,
+                    alignment: Alignment.centerRight,
+                    child:
+                      TextButton(
+
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => ForgotPasswordScreen(title: 'Forgot Password Page')),);
+                        },
+                        child:
+                        const Text(
+                          'Forgot Password?',
+                          style: TextStyle(
+                            color: Color(0xff808080),
+                            fontSize: 14,
+                            //fontFamily: 'Poppins',
+                          ),
+                        ),
+                      ),
                   ),
+
+                  ],
               ),
 
+              SizedBox(
+                height: 50.0,
+              ),
+              loginButton,
+
+
+            ],
+
+
+
+          ),
               ],
-          ),
-
-          SizedBox(
-            height: 50.0,
-          ),
-          loginButton,
-
-
-        ],
-
-
-
-      ),
-
+         ),
+        ),
+        ),
     );
-  }
+      }
 }

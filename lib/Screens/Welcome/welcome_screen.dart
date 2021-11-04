@@ -89,8 +89,11 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
     );
 
     return Scaffold(
-        resizeToAvoidBottomInset : false,
+        //resizeToAvoidBottomInset : false,
       body: SingleChildScrollView(
+        //to make the page fit great
+        child: ConstrainedBox(
+        constraints: BoxConstraints(maxHeight: MediaQuery.of(context).size.height),
 
       child: Row(
        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -119,7 +122,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                 ),
               ),
               SizedBox(
-                height: 200.0,
+                height: 150.0,
               ),
 
               loginButton, //defined above
@@ -138,7 +141,8 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
           ),
         ], //row children
       ),
-    )
+    ),
+      ),
     );
   }
 }
