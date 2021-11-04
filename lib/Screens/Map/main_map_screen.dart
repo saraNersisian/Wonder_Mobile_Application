@@ -5,6 +5,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:wonder_flutter/Screens/Login/login_screen.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:wonder_flutter/Screens/Chat/chat_screen.dart';
 
 
 import 'dart:async';
@@ -131,8 +132,12 @@ class _MainMapScreenState extends State<MainMapScreen> {
 
               floatingActionButton: FloatingActionButton(
                 onPressed: (){
+                  Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => chatScreen(title: 'Forgot Password Page')),);
+                  },
 
-                },
+
                 child: const Icon(Icons.chat),
                 backgroundColor: Color(0xffC27BA0),
               ),
@@ -158,7 +163,7 @@ class _MainMapScreenState extends State<MainMapScreen> {
 
         decoration: InputDecoration(
           border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(20.0),
+            borderRadius: BorderRadius.circular(100.0),
             borderSide: BorderSide.none,
           ),
 

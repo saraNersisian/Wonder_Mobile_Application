@@ -54,7 +54,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
       child: MaterialButton(
         //minWidth: MediaQuery.of(context).size.width,
         minWidth: 350,
-        padding: EdgeInsets.fromLTRB(10.0, 15.0, 15.0, 15.0),
+        padding: EdgeInsets.fromLTRB(15.0, 15.0, 15.0, 15.0),
         onPressed: () {
           Navigator.push(
             context,
@@ -74,7 +74,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
       color: Color(0xff33BDFF),
       child: MaterialButton(
         minWidth: 350,
-        padding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
+        padding: EdgeInsets.fromLTRB(15.0, 15.0, 15.0, 15.0),
         onPressed: () {
           Navigator.push(
             context,
