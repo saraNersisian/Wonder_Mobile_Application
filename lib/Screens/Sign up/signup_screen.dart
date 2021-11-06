@@ -8,6 +8,10 @@ import 'package:wonder_flutter/Screens/Login/login_screen.dart';
 import 'package:firebase_database/firebase_database.dart';
 //import 'package:commons/commons.dart';
 
+
+
+//commons: ^0.7.8+3
+
 class SignUpScreen extends StatefulWidget {
   SignUpScreen({Key? key, required this.title}) : super(key: key);
 
@@ -25,7 +29,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
   var passwordController = TextEditingController();
   var usernameController = TextEditingController();
   var phoneNumberController = TextEditingController();
-  var zipCodeController = TextEditingController();
+  var msgController = TextEditingController();
+  var markerController = TextEditingController();
+ // var zipCodeController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -50,7 +56,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
               'username': usernameController.text,
               'email': emailController.text,
               'phone': phoneNumberController.text,
-              'zipcode': zipCodeController.text,
+              'msg': msgController.text,
+              'markerLocation': markerController.text,
+              //'zipcode': zipCodeController.text,
 
             };
 
@@ -209,32 +217,32 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
                       ),
                     ),
-                    Container(
-                      margin: EdgeInsets.only(left: 35, right: 35, bottom: 0, top: 5),
-                      child:
-
-                      TextField(
-                        controller: zipCodeController,
-                        decoration: InputDecoration(
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(20.0),
-                            borderSide: BorderSide.none,
-                          ),
-                          filled: true,
-                          fillColor: Color(0xffffeec5),
-                          labelText: "Zip Code",
-                          // prefixIcon: Icon(
-                          //   FontAwesomeIcons.solidEnvelope,
-                          //   color: Colors.grey,
-                          //   size:22,
-                          // ),
-                        ),
-
-                      ),
-
-                    ),
+                    // Container(
+                    //   margin: EdgeInsets.only(left: 35, right: 35, bottom: 0, top: 5),
+                    //   child:
+                    //
+                    //   TextField(
+                    //     controller: zipCodeController,
+                    //     decoration: InputDecoration(
+                    //       border: OutlineInputBorder(
+                    //         borderRadius: BorderRadius.circular(20.0),
+                    //         borderSide: BorderSide.none,
+                    //       ),
+                    //       filled: true,
+                    //       fillColor: Color(0xffffeec5),
+                    //       labelText: "Zip Code",
+                    //       // prefixIcon: Icon(
+                    //       //   FontAwesomeIcons.solidEnvelope,
+                    //       //   color: Colors.grey,
+                    //       //   size:22,
+                    //       // ),
+                    //     ),
+                    //
+                    //   ),
+                    //
+                    // ),
                     SizedBox(
-                      height: 70.0,
+                      height: 40.0,
                     ),
                     Container(
                       child:
