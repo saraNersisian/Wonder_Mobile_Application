@@ -45,15 +45,7 @@ class _MainMapScreenState extends State<MainMapScreen> {
   // }
   @override
   Widget build(BuildContext context) {
-    // return Scaffold(
-    //
-    //
-    //     body: GoogleMap(
-    //       initialCameraPosition: _kInitialPosition,
-    //     ),
-    //
-    //
-    // );
+
     BorderRadiusGeometry radius = BorderRadius.only(
       topLeft: Radius.circular(100.0),
       topRight: Radius.circular(100.0),
@@ -65,22 +57,27 @@ class _MainMapScreenState extends State<MainMapScreen> {
 
     child: Column(
 
+
        children:[
+
          SlidingUpPanel(
+
             backdropEnabled: true,
-            maxHeight: 300,
+            maxHeight: 180,
             panel:Center (
 
                 child:Column(
                   children:<Widget> [
                     _buildTextField(),
+
                   ElevatedButton(
 
                     style: ElevatedButton.styleFrom(shape: new RoundedRectangleBorder(
-                      borderRadius: new BorderRadius.circular(30.0),
+                      borderRadius: new BorderRadius.circular(100.0),
 
 
-                    ), ),
+                    ),
+                    ),
 
                       onPressed: (){
                   Navigator.push(
@@ -99,11 +96,14 @@ class _MainMapScreenState extends State<MainMapScreen> {
             collapsed:
             Container(
                   decoration: BoxDecoration(
+
                     color: Color(0xff4CA3DD),
                     borderRadius: radius,
                   ),
+                  
 
                   child: Center(
+
                     child: Text(
                       "Swip Up to Create a Post",
                       style: TextStyle(
@@ -118,36 +118,48 @@ class _MainMapScreenState extends State<MainMapScreen> {
 
                   ),
                 ),
-
+            minHeight: 50,
+           // padding: EdgeInsets.all(20),
             borderRadius: radius,
             margin: const EdgeInsets.fromLTRB(30.0, 30.0, 30.0, 0.0),
 
             body: Scaffold(
-              body: GoogleMap(
-                initialCameraPosition: _kInitialPosition,
-              ),
-              // appBar: AppBar(
-              //     title: Text('Google Maps Demo'),
-              //   ),
+              body:
+              GoogleMap(
 
-              floatingActionButton: FloatingActionButton(
-                onPressed: (){
-                  Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => ChatScreen(title: 'Chat page')),);
+                     initialCameraPosition: _kInitialPosition,
+                     myLocationEnabled: true,
+                     myLocationButtonEnabled: false,
+                     mapToolbarEnabled: true,
+                     zoomControlsEnabled: false,
+
+
+
+                 ),
+
+              floatingActionButton: Align(
+                child: FloatingActionButton(
+
+
+                  onPressed: (){
+                    // Navigator.push(
+                    //   context,
+                    //   MaterialPageRoute(builder: (context) => ChatScreen(title: 'Chat page')),);
                   },
+                  child: const Icon(Icons.chat),
+                  backgroundColor: Color(0xffC27BA0),
 
-
-                child: const Icon(Icons.chat),
-                backgroundColor: Color(0xffC27BA0),
+                ),
+                alignment: Alignment(0.9,0.9),
               ),
 
+                 ),
+            ),
+          ],
+        ),
 
-            )
-        )
-],
-    ),
     );
+
   }
 
   Widget _buildTextField() {
@@ -155,8 +167,8 @@ class _MainMapScreenState extends State<MainMapScreen> {
 
     return Container(
 
-      margin: EdgeInsets.all(30),
-      height: maxLines * 30.0,
+      margin: EdgeInsets.fromLTRB(30, 20, 30, 5),
+      height: maxLines * 20.0,
 
       child: TextField(
         maxLines: maxLines,

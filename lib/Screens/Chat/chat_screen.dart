@@ -1,4 +1,4 @@
-
+/*
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
@@ -31,18 +31,55 @@ class _ChatScreenState extends State<ChatScreen> {
   // final List<String> date = <String>['10/20', '10/01', '09/11'];
 
 
-  List<User> user = List.empty();
+  
+  //List<User> user = List.empty();
+  var userList = [];
 
   _ChatScreenState() {
-    User u1 = User ("Daron", "(818)222-8719","https://img.favpng.com/21/10/23/computer-icons-avatar-social-media-blog-font-awesome-png-favpng-jKXEv9rWhum7VbNKDbcELd6Di.jpg","11/02" );
-    User u2 = User ("Sara", "(818)234-8700","https://image.pngaaa.com/712/2127712-middle.png","10/14" );
-    User u3 = User ("Mel", "(818)222-8999","https://image.pngaaa.com/712/2127712-middle.png","12/12" );
-    User u4 = User ("Derenik", "(818)353-3429","https://img.favpng.com/21/10/23/computer-icons-avatar-social-media-blog-font-awesome-png-favpng-jKXEv9rWhum7VbNKDbcELd6Di.jpg","11/02" );
-    User u5 = User ("Meghri", "(818)222-2344","https://image.pngaaa.com/712/2127712-middle.png","01/03" );
+    refreshFriendsList();
+    FirebaseDatabase.instance.reference().child("user").onChildChanged.listen((event) {
+      refreshFriendsList();
+    });
+    FirebaseDatabase.instance.reference().child("user").onChildRemoved.listen((event) {
+      refreshFriendsList();
+    });
+    FirebaseDatabase.instance.reference().child("user").onChildAdded.listen((event) {
+      refreshFriendsList();
+    });
 
-    user = [u1, u2, u3, u4, u5];
+    // User u1 = User ("Daron", "(818)222-8719","https://img.favpng.com/21/10/23/computer-icons-avatar-social-media-blog-font-awesome-png-favpng-jKXEv9rWhum7VbNKDbcELd6Di.jpg","11/02" );
+    // User u2 = User ("Sara", "(818)234-8700","https://image.pngaaa.com/712/2127712-middle.png","10/14" );
+    // User u3 = User ("Mel", "(818)222-8999","https://image.pngaaa.com/712/2127712-middle.png","12/12" );
+    // User u4 = User ("Derenik", "(818)353-3429","https://img.favpng.com/21/10/23/computer-icons-avatar-social-media-blog-font-awesome-png-favpng-jKXEv9rWhum7VbNKDbcELd6Di.jpg","11/02" );
+    // User u5 = User ("Meghri", "(818)222-2344","https://image.pngaaa.com/712/2127712-middle.png","01/03" );
+    //
+    // user = [u1, u2, u3, u4, u5];
   }
+  
+  void refreshFriendsList()
+  {
+    FirebaseDatabase.instance.reference().child("users").once()
+        .then((datasnapshot) {
+          print(datasnapshot.key);
+          print(datasnapshot.value);
 
+          var userTempList = [];
+
+          datasnapshot.value.forEach((k, v){
+            print("key:" + k);
+            print("value:" + v);
+            userTempList.add(v);
+          });
+          userList = userTempList;
+          print(userList);
+          setState(() {
+
+          });
+
+    }).catchError((error){
+      print("Failed to load the data");
+    });
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -50,7 +87,7 @@ class _ChatScreenState extends State<ChatScreen> {
       //   title: const Text("Second Route"),
       // ),
       body: ListView.builder(
-          itemCount: user.length,
+          itemCount: userList.length,
           itemBuilder: (BuildContext context, int index) {
             return 
               ListTile(
@@ -58,7 +95,7 @@ class _ChatScreenState extends State<ChatScreen> {
                 {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => ChatDetailPage( user )),);
+                    MaterialPageRoute(builder: (context) => ChatDetailPage( userList[index] )),);
 
                   print("the item is clicked");
                 },
@@ -73,7 +110,9 @@ class _ChatScreenState extends State<ChatScreen> {
                         margin: EdgeInsets.only(right: 20),
                         child: CircleAvatar(
                             backgroundImage: NetworkImage(
-                                "${user[index].imageUrl}")
+                                //"${userList[index]['imageUrl']}"
+                              "https://image.pngaaa.com/712/2127712-middle.png"
+                            )
                         ),
                       ),
                       Column(
@@ -81,23 +120,23 @@ class _ChatScreenState extends State<ChatScreen> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
-                              '${user[index].name}',
+                              '${userList[index]['username']}',
 
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
                               )
                           ),
                           Text(
-                            '${user[index].phone}',
+                            '${userList[index]['phone']}',
                           ),
 
 
                         ],
                       ),
-                      Spacer(),
-                      Text(
-                        '${user[index].date}',
-                      )
+                      // Spacer(),
+                      // Text(
+                      //   '${userList[index]['date']}',
+                      // )
 
 
                     ],
@@ -112,3 +151,5 @@ class _ChatScreenState extends State<ChatScreen> {
     );
   }
 }
+
+ */
