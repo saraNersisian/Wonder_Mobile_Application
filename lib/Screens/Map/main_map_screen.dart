@@ -1,36 +1,66 @@
+
+import 'package:location/location.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+//import 'package:geolocator/geolocator.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:wonder_flutter/Screens/Login/login_screen.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:wonder_flutter/Screens/Chat/chat_screen.dart';
-import 'package:geolocator/geolocator.dart';
-
+import 'package:flutter_awesome_alert_box/flutter_awesome_alert_box.dart';
 import 'dart:async';
+
+
 
 class MainMapScreen extends StatefulWidget {
   MainMapScreen({Key? key, required this.title}) : super(key: key);
-
-
   final String title;
-
   @override
   _MainMapScreenState createState() => _MainMapScreenState();
 }
 
 class _MainMapScreenState extends State<MainMapScreen> {
   TextStyle style = TextStyle(fontFamily: 'Montserrat', fontSize: 20.0);
-  static final LatLng _kMapCenter = LatLng(34.143884, -118.253597);
 
-  static final CameraPosition _kInitialPosition =
-   CameraPosition(target: _kMapCenter, zoom: 11.0, tilt: 0, bearing: 0);
-
+  LatLng currentLocation = LatLng(34.05223, -118.24368);
   Set<Marker> _markers = {};
   late BitmapDescriptor mapMarker;
 
+  //getting users current location
+  Location location = new Location();
 
+  late bool _serviceEnabled ;
+  late PermissionStatus _permissionGranted;
+  late LocationData _locationData;
+
+
+   void  _getCurrentLocation() async{
+
+     _serviceEnabled =  await location.serviceEnabled();
+    if (!_serviceEnabled) {
+      _serviceEnabled = await location.requestService();
+      if (!_serviceEnabled) {
+        return;
+      }
+    }
+
+    _permissionGranted = await location.hasPermission();
+    if (_permissionGranted == PermissionStatus.denied) {
+      _permissionGranted = await location.requestPermission();
+      if (_permissionGranted != PermissionStatus.granted) {
+        return;
+      }
+    }
+    _locationData = await location.getLocation();
+    //currentLocation = LatLng(_locationData.latitude!,_locationData.longitude!);
+
+    //print(currentLocation);
+
+  }
+
+  //putting a marker
   void setCustomMarker() async{
     mapMarker = await BitmapDescriptor.defaultMarker;
   }
@@ -43,11 +73,11 @@ class _MainMapScreenState extends State<MainMapScreen> {
       _markers.add(
         Marker(
             markerId: MarkerId("id_1"),
-        position: _kMapCenter,
-        onTap: () {
+        //position: LatLng(_locationData.latitude!,_locationData.longitude!),
+            position: currentLocation,
+           onTap: () {
               showAlertDialog(context);
-
-        }
+             }
         // infoWindow: InfoWindow(
         //
         //   title: displayThis,
@@ -62,13 +92,16 @@ class _MainMapScreenState extends State<MainMapScreen> {
   showAlertDialog(BuildContext context) {
 
     // set up the button
+
     Widget closeButton = TextButton(
       child: Text("Close"),
-      onPressed: () { },
+      onPressed: () => Navigator.pop(context, true),
     );
     Widget replyButton = TextButton(
       child: Text("Reply"),
-      onPressed: () { },
+      onPressed: () {
+        //go to chat page
+      },
     );
 
     // set up the AlertDialog
@@ -78,7 +111,6 @@ class _MainMapScreenState extends State<MainMapScreen> {
       actions: [
         replyButton,
         closeButton,
-
       ],
     );
 
@@ -93,15 +125,12 @@ class _MainMapScreenState extends State<MainMapScreen> {
 
   @override
   Widget build(BuildContext context) {
+    _getCurrentLocation();
 
     BorderRadiusGeometry radius = BorderRadius.only(
-      topLeft: Radius.circular(100.0),
-      topRight: Radius.circular(100.0),
-
-    );
-
-
-
+        topLeft: Radius.circular(100.0),
+        topRight: Radius.circular(100.0),
+        );
 
     // return GestureDetector(
     //   onTap:()=>FocusScope.of(context).unfocus(),
@@ -118,25 +147,20 @@ class _MainMapScreenState extends State<MainMapScreen> {
                       children:<Widget> [
                         _buildTextField(),
                       ElevatedButton(
-                        style: ElevatedButton.styleFrom(shape: new RoundedRectangleBorder(
-                          borderRadius: new BorderRadius.circular(100.0),
+                        style: ElevatedButton.styleFrom(
+                          shape: new RoundedRectangleBorder(
+                            borderRadius: new BorderRadius.circular(100.0),
                            ),
                         ),
                         onPressed: () {
-
                           displayThis = textEditingController.text;
-                          print(displayThis);
-                          // Navigator.push(
-                          // context,
-                          // MaterialPageRoute(builder: (context) => MainMapScreen(title: 'main map page')),);
-
                         },
                           child: Text(
                             "Post"
                           ),
-                      )
+                        ),
                       ],
-                    )
+                    ),
                   ),
                 collapsed:
                 Container(
@@ -156,31 +180,31 @@ class _MainMapScreenState extends State<MainMapScreen> {
                       ),
                     ),
                 minHeight: 50,
-               // padding: EdgeInsets.all(20),
                 borderRadius: radius,
                 margin: const EdgeInsets.fromLTRB(30.0, 30.0, 30.0, 0.0),
 
                 body: Scaffold(
                   body:
                   GoogleMap(
+
                          mapType: MapType.normal,
-                         initialCameraPosition: _kInitialPosition,
+                         initialCameraPosition: CameraPosition(
+                             //target: LatLng(_locationData.latitude!,_locationData.longitude!),
+                             target:currentLocation ,
+                             zoom: 11.0,
+                             tilt: 0,
+                             bearing: 0),
                          myLocationEnabled: true,
-                         myLocationButtonEnabled: false,
+                         myLocationButtonEnabled: true,
                          mapToolbarEnabled: true,
                          zoomControlsEnabled: false,
                          onMapCreated:_onMapCreated,
                          markers: _markers,
 
-
-
-
                      ),
 
                   floatingActionButton: Align(
                     child: FloatingActionButton(
-
-
                       onPressed: (){
                         // Navigator.push(
                         //   context,
@@ -188,12 +212,9 @@ class _MainMapScreenState extends State<MainMapScreen> {
                       },
                       child: const Icon(Icons.chat),
                       backgroundColor: Color(0xff33BDFF),
-
                     ),
                     alignment: Alignment(0.9,0.9),
-
-                  ),
-
+                      ),
                      ),
                 ),
               ],
