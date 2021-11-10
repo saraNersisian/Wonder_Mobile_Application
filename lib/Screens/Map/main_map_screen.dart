@@ -5,10 +5,12 @@ import 'package:flutter/material.dart';
 //import 'package:geolocator/geolocator.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:wonder_flutter/Screens/Chat/chat_page.dart';
 import 'package:wonder_flutter/Screens/Login/login_screen.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:wonder_flutter/Screens/Chat/chat_screen.dart';
+import 'package:wonder_flutter/Screens/Chat/chat_page.dart';
 import 'package:flutter_awesome_alert_box/flutter_awesome_alert_box.dart';
 import 'dart:async';
 
@@ -99,8 +101,10 @@ class _MainMapScreenState extends State<MainMapScreen> {
     );
     Widget replyButton = TextButton(
       child: Text("Reply"),
-      onPressed: () {
-        //go to chat page
+      onPressed: (){
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => ChatPage(title: 'Chat page')),);
       },
     );
 
@@ -153,6 +157,7 @@ class _MainMapScreenState extends State<MainMapScreen> {
                            ),
                         ),
                         onPressed: () {
+                          //Navigator.pop(context);
                           displayThis = textEditingController.text;
                         },
                           child: Text(
@@ -206,14 +211,14 @@ class _MainMapScreenState extends State<MainMapScreen> {
                   floatingActionButton: Align(
                     child: FloatingActionButton(
                       onPressed: (){
-                        // Navigator.push(
-                        //   context,
-                        //   MaterialPageRoute(builder: (context) => ChatScreen(title: 'Chat page')),);
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => ChatPage(title: 'Chat page')),);
                       },
                       child: const Icon(Icons.chat),
                       backgroundColor: Color(0xff33BDFF),
                     ),
-                    alignment: Alignment(0.9,0.9),
+                    alignment: Alignment(0.89,0.87),
                       ),
                      ),
                 ),
