@@ -30,7 +30,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   var usernameController = TextEditingController();
   var phoneNumberController = TextEditingController();
   var msgController = TextEditingController();
-  var markerController = TextEditingController();
+  //var markerController = TextEditingController();
  // var zipCodeController = TextEditingController();
 
   @override
@@ -57,7 +57,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
               'email': emailController.text,
               'phone': phoneNumberController.text,
               'msg': msgController.text,
-              'markerLocation': markerController.text,
+              //'markerLocation': markerController.text,
               //'zipcode': zipCodeController.text,
 
             };
@@ -67,7 +67,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
             .then((value){
               print("Successfully created the profile info ");
              }).catchError((error) {
-            print("Faile!");
+            print("Failed!");
 
             });
 

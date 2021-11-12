@@ -1,5 +1,7 @@
 import 'dart:convert';
 import 'package:file_picker/file_picker.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
@@ -9,11 +11,11 @@ import 'package:intl/date_symbol_data_local.dart';
 import 'package:mime/mime.dart';
 import 'package:open_file/open_file.dart';
 import 'package:uuid/uuid.dart';
-
+//
 // void main() {
 //   initializeDateFormatting().then((_) => runApp(const MyApp()));
 // }
-
+//
 // class MyApp extends StatelessWidget {
 //   const MyApp({Key? key}) : super(key: key);
 //
@@ -26,7 +28,7 @@ import 'package:uuid/uuid.dart';
 // }
 
 class ChatPage extends StatefulWidget {
-  ChatPage({Key? key, required this.title}) : super(key: key);
+  ChatPage({Key? key,  required this.title}) : super(key: key);
   final String title;
   //const ChatPage({Key? key}) : super(key: key);
 
@@ -36,6 +38,7 @@ class ChatPage extends StatefulWidget {
 
 class _ChatPageState extends State<ChatPage> {
   List<types.Message> _messages = [];
+  //the current user should be placed here
   final _user = const types.User(id: '06c33e8b-e835-4736-80f4-63f44b66666c');
 
   @override
@@ -59,35 +62,35 @@ class _ChatPageState extends State<ChatPage> {
             height: 144,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
-              //children: <Widget>[
-              //   TextButton(
-              //     onPressed: () {
-              //       Navigator.pop(context);
-              //       _handleImageSelection();
-              //     },
-              //     child: const Align(
-              //       alignment: Alignment.centerLeft,
-              //       child: Text('Photo'),
-              //     ),
-              //   ),
-              //   TextButton(
-              //     onPressed: () {
-              //       Navigator.pop(context);
-              //       _handleFileSelection();
-              //     },
-              //     child: const Align(
-              //       alignment: Alignment.centerLeft,
-              //       child: Text('File'),
-              //     ),
-              //   ),
-              //   TextButton(
-              //     onPressed: () => Navigator.pop(context),
-              //     child: const Align(
-              //       alignment: Alignment.centerLeft,
-              //       child: Text('Cancel'),
-              //     ),
-              //   ),
-              // ],
+              children: <Widget>[
+                TextButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                    _handleImageSelection();
+                  },
+                  child: const Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text('Photo'),
+                  ),
+                ),
+                TextButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                    _handleFileSelection();
+                  },
+                  child: const Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text('File'),
+                  ),
+                ),
+                TextButton(
+                  onPressed: () => Navigator.pop(context),
+                  child: const Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text('Cancel'),
+                  ),
+                ),
+              ],
             ),
           ),
         );
@@ -95,57 +98,57 @@ class _ChatPageState extends State<ChatPage> {
     );
   }
 
-  // void _handleFileSelection() async {
-  //   final result = await FilePicker.platform.pickFiles(
-  //     type: FileType.any,
-  //   );
-  //
-  //   if (result != null && result.files.single.path != null) {
-  //     final message = types.FileMessage(
-  //       author: _user,
-  //       createdAt: DateTime.now().millisecondsSinceEpoch,
-  //       id: const Uuid().v4(),
-  //       mimeType: lookupMimeType(result.files.single.path!),
-  //       name: result.files.single.name,
-  //       size: result.files.single.size,
-  //       uri: result.files.single.path!,
-  //     );
-  //
-  //     _addMessage(message);
-  //   }
-  // }
-  //
-  // void _handleImageSelection() async {
-  //   final result = await ImagePicker().pickImage(
-  //     imageQuality: 70,
-  //     maxWidth: 1440,
-  //     source: ImageSource.gallery,
-  //   );
-  //
-  //   if (result != null) {
-  //     final bytes = await result.readAsBytes();
-  //     final image = await decodeImageFromList(bytes);
-  //
-  //     final message = types.ImageMessage(
-  //       author: _user,
-  //       createdAt: DateTime.now().millisecondsSinceEpoch,
-  //       height: image.height.toDouble(),
-  //       id: const Uuid().v4(),
-  //       name: result.name,
-  //       size: bytes.length,
-  //       uri: result.path,
-  //       width: image.width.toDouble(),
-  //     );
-  //
-  //     _addMessage(message);
-  //   }
-  // }
+  void _handleFileSelection() async {
+    final result = await FilePicker.platform.pickFiles(
+      type: FileType.any,
+    );
 
-  // void _handleMessageTap(types.Message message) async {
-  //   if (message is types.FileMessage) {
-  //     await OpenFile.open(message.uri);
-  //   }
-  // }
+    if (result != null && result.files.single.path != null) {
+      final message = types.FileMessage(
+        author: _user,
+        createdAt: DateTime.now().millisecondsSinceEpoch,
+        id: const Uuid().v4(),
+        mimeType: lookupMimeType(result.files.single.path!),
+        name: result.files.single.name,
+        size: result.files.single.size,
+        uri: result.files.single.path!,
+      );
+
+      _addMessage(message);
+    }
+  }
+
+  void _handleImageSelection() async {
+    final result = await ImagePicker().pickImage(
+      imageQuality: 70,
+      maxWidth: 1440,
+      source: ImageSource.gallery,
+    );
+
+    if (result != null) {
+      final bytes = await result.readAsBytes();
+      final image = await decodeImageFromList(bytes);
+
+      final message = types.ImageMessage(
+        author: _user,
+        createdAt: DateTime.now().millisecondsSinceEpoch,
+        height: image.height.toDouble(),
+        id: const Uuid().v4(),
+        name: result.name,
+        size: bytes.length,
+        uri: result.path,
+        width: image.width.toDouble(),
+      );
+
+      _addMessage(message);
+    }
+  }
+
+  void _handleMessageTap(types.Message message) async {
+    if (message is types.FileMessage) {
+      await OpenFile.open(message.uri);
+    }
+  }
 
   void _handlePreviewDataFetched(
       types.TextMessage message,
@@ -190,8 +193,8 @@ class _ChatPageState extends State<ChatPage> {
         bottom: false,
         child: Chat(
           messages: _messages,
-         // onAttachmentPressed: _handleAtachmentPressed,
-         // onMessageTap: _handleMessageTap,
+         onAttachmentPressed: _handleAtachmentPressed,
+         onMessageTap: _handleMessageTap,
           onPreviewDataFetched: _handlePreviewDataFetched,
           onSendPressed: _handleSendPressed,
           user: _user,
