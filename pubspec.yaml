@@ -37,7 +37,6 @@ dependencies:
   firebase_auth: ^0.14.0+5
   firebase_database: ^3.1.6
   location: ^4.2.0
-  geolocator: ^7.7.1
   google_maps_flutter: ^2.0.1
   flutter_awesome_alert_box: ^2.1.1
   font_awesome_flutter: ^9.2.0
@@ -45,11 +44,17 @@ dependencies:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.3
+  flutter_launcher_icons: ^0.9.2
+flutter_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/luncher_Icon.png"
 
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
