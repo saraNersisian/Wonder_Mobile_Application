@@ -1,9 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart' show rootBundle;
-import 'package:location/location.dart';
+//import 'package:location/location.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-//import 'package:geolocator/geolocator.dart';
+import "package:geolocator/geolocator.dart";
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:wonder_flutter/Screens/Chat/chat_page.dart';
@@ -38,43 +38,36 @@ class _MainMapScreenState extends State<MainMapScreen> {
   //   });
   // }
 
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   _getCurrentLocation();
+  // }
+
+    _MainMapScreenState() {
+        _getCurrentLocation();
+      }
+
+    String _locationMessage = "";
+    //setting Los Angeles LatLng as an initial position
+    double latitude = 34.052235;
+    double longitude =  -118.243683;
+
+  void _getCurrentLocation() async {
+    final position = await Geolocator.getCurrentPosition( desiredAccuracy: LocationAccuracy.low, forceAndroidLocationManager: true);
+    // print("-----------------------------------");
+    // print(position);
+    latitude = position.latitude;
+    longitude = position.longitude;
+    setState(() {
+      _locationMessage = "${position.latitude}, ${position.longitude}";
+    });
+
+  }
 
 
-  LatLng currentLocation = LatLng(34.05223, -118.24368);
   Set<Marker> _markers = {};
   late BitmapDescriptor mapMarker;
-
-  //getting users current location
- // Location location = new Location();
-
-  // late bool _serviceEnabled ;
-  // late PermissionStatus _permissionGranted;
-  // late LocationData _locationData;
-
-
-  //  void  _getCurrentLocation() async{
-  //
-  //    _serviceEnabled =  await location.serviceEnabled();
-  //   if (!_serviceEnabled) {
-  //     _serviceEnabled = await location.requestService();
-  //     if (!_serviceEnabled) {
-  //       return;
-  //     }
-  //   }
-  //
-  //   _permissionGranted = await location.hasPermission();
-  //   if (_permissionGranted == PermissionStatus.denied) {
-  //     _permissionGranted = await location.requestPermission();
-  //     if (_permissionGranted != PermissionStatus.granted) {
-  //       return;
-  //     }
-  //   }
-  //   _locationData = await location.getLocation();
-  //   //currentLocation = LatLng(_locationData.latitude!,_locationData.longitude!);
-  //
-  //   //print(currentLocation);
-  //
-  // }
 
   //putting a marker
   void setCustomMarker() async{
@@ -91,9 +84,7 @@ class _MainMapScreenState extends State<MainMapScreen> {
 
 
   showAlertDialog(BuildContext context) {
-
     // set up the button
-
     Widget closeButton = TextButton(
       child: Text("Close"),
       onPressed: () => Navigator.pop(context, true),
@@ -189,55 +180,65 @@ class _MainMapScreenState extends State<MainMapScreen> {
            children:[
              SlidingUpPanel(
                 backdropEnabled: true,
-                maxHeight: 180,
+                maxHeight: 200,
                 panel:Center (
                     child:Column(
                       children:<Widget> [
                         _buildTextField(),
-                      ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          shape: new RoundedRectangleBorder(
-                            borderRadius: new BorderRadius.circular(100.0),
+                       Container(
+                         width: 200,   //post button width
+                         child:
+                         ElevatedButton(
+
+                           style: ElevatedButton.styleFrom(
+                             shape: new RoundedRectangleBorder(
+                               borderRadius: new BorderRadius.circular(100.0),
+                             ),
                            ),
-                        ),
-                        onPressed: () async {
-                          //Navigator.pop(context);
-                          displayThis = textEditingController.text;
-                          setState(() {
-                            _markers.add(
-                              Marker(
-                                //create a custom marker id
-                                  markerId: MarkerId("id_1"),
-                                  position:currentLocation,
-                                  onTap: () {
-                                    showAlertDialog(context);
-                                  }
-                                // infoWindow: InfoWindow(
-                                //
-                                //   title: displayThis,
-                                // ),
-                              ),
-                            );
-                          });
+                           onPressed: () async {
+                             //Navigator.pop(context);
+                             displayThis = textEditingController.text;
+                             setState(() {
+                               _markers.add(
+                                 Marker(
+                                   //create a custom marker id
+                                     markerId: MarkerId("id_1"),
+                                     position: LatLng(latitude,longitude),
+                                     onTap: () {
+                                       showAlertDialog(context);
+                                     }
+                                   // infoWindow: InfoWindow(
+                                   //
+                                   //   title: displayThis,
+                                   // ),
+                                 ),
+                               );
+                             });
 
-                        //saving current marker into firebase
-                          FirebaseUser user = await FirebaseAuth.instance.currentUser();
-                          FirebaseDatabase.instance.reference().child("users/" + user.uid + "/marker")
-                              .set({
-                            "lat" : 32,
-                            "lon" : 32,
-                          })
-                              .then((value){
-                            print("Successfully created the marker ");
-                          }).catchError((error) {
-                            print("Failed to create the marker!");
+                             //saving current marker into firebase
+                             FirebaseUser user = await FirebaseAuth.instance.currentUser();
+                             FirebaseDatabase.instance.reference().child("users/" + user.uid + "/marker")
+                                 .set({
+                               "lat" : latitude,
+                               "lon" : longitude,
+                             })
+                                 .then((value){
+                               print("Successfully created the marker ");
+                             }).catchError((error) {
+                               print("Failed to create the marker!");
 
-                          });
-                        },
-                          child: Text(
-                            "Post"
-                          ),
-                        ),
+                             });
+                           },
+                           child: Text(
+                               "Post",
+                               style: TextStyle(
+                                fontSize: 16,
+                               //fontFamily: 'Poppins',
+                               color: Colors.white,
+                             ),
+                           ),
+                         ),
+                       )
                       ],
                     ),
                   ),
@@ -268,58 +269,69 @@ class _MainMapScreenState extends State<MainMapScreen> {
 
                          mapType: MapType.normal,
                          initialCameraPosition: CameraPosition(
-                             target:currentLocation ,
-                             zoom: 11.0,
+                             target: LatLng(latitude,longitude) ,
+                             zoom: 8.0,
                              tilt: 0,
                              bearing: 0),
                          myLocationEnabled: true,
-                         myLocationButtonEnabled: true,
+                         myLocationButtonEnabled: false,
                          mapToolbarEnabled: true,
                          zoomControlsEnabled: true,
-                         onMapCreated:_onMapCreated,
-                         // onMapCreated: (GoogleMapController controller) {
-                         //          mapController = controller;
+                         //onMapCreated:_onMapCreated,
+                         onMapCreated: (GoogleMapController controller) {
+                                     mapController = controller;
                          //          mapController.setMapStyle(_mapStyle);
-                         //            },
+                                     },
                          markers: _markers,
 
                      ),
-
-                  floatingActionButton: Align(
-                    child: FloatingActionButton(
-                      onPressed: (){
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => ChatPage(title: 'Chat page')),);
-                      },
-                      child: const Icon(Icons.chat),
-                      backgroundColor: Color(0xff33BDFF),
-                    ),
-                    alignment: Alignment(0.89,0.87),
+                  floatingActionButton:Wrap(
+                    direction: Axis.horizontal,
+                    children: <Widget>[
+                      Container(
+                        margin: EdgeInsets.fromLTRB(20, 0, 210, 45),
+                        //alignment: Alignment(-0.75,0.87),
+                        child: FloatingActionButton(
+                          onPressed: ()  {
+                           mapController.animateCamera(
+                           CameraUpdate.newCameraPosition(
+                            CameraPosition(
+                                 target: LatLng(latitude,longitude) ,zoom: 15.0),),);
+                          },
+                          child: const Icon(Icons.location_on),
+                          backgroundColor: Color(0xff33BDFF),
+                        ),
                       ),
-                     ),
+                      Container(
+                      margin: EdgeInsets.fromLTRB(0, 0, 20, 0),
+                     // alignment: Alignment(0.89,0.80),
+                      child: FloatingActionButton(
+                        onPressed: ()  {
+                          Navigator.push(
+                                      context,
+                                      MaterialPageRoute(builder: (context) => ChatPage(title: 'Chat page')),);
+                                  },
+                                  child: const Icon(Icons.chat),
+                                  backgroundColor: Color(0xff33BDFF),
+                                ),
+                         ),
+                       ],
+                      )
+                    ),
                 ),
               ],
             ),
-
-
       );
-
   }
 
   Widget _buildTextField() {
     final maxLines = 5;
     return Container(
-
-      margin: EdgeInsets.fromLTRB(30, 20, 30, 5),
+      margin: EdgeInsets.fromLTRB(30, 30, 30, 10),
       height: maxLines * 20.0,
-
       child: TextField(
-
         controller: textEditingController,
-
         maxLines: maxLines,
-
         decoration: InputDecoration(
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(100.0),
