@@ -74,7 +74,7 @@ flutter:
    - Image/blue.png
    - Image/W_logo.png
   #   - images/a_dot_ham.jpeg
-   - assets/map_style_retro.txt
+   - assets/map_dark_mode.txt
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

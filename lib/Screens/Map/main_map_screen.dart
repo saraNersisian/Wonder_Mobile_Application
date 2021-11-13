@@ -28,15 +28,15 @@ class _MainMapScreenState extends State<MainMapScreen> {
   late GoogleMapController mapController;
 
 
-  // late String _mapStyle; // map style
-  // @override
-  // void initState() {
-  //   super.initState();
-  //
-  //   rootBundle.loadString('assets/map_style_retro.txt').then((string) {
-  //     _mapStyle = string;
-  //   });
-  // }
+  late String _mapStyle; // map style
+  @override
+  void initState() {
+    super.initState();
+
+    rootBundle.loadString('assets/map_dark_mode.txt').then((string) {
+      _mapStyle = string;
+    });
+  }
 
   // @override
   // void initState() {
@@ -280,7 +280,7 @@ class _MainMapScreenState extends State<MainMapScreen> {
                          //onMapCreated:_onMapCreated,
                          onMapCreated: (GoogleMapController controller) {
                                      mapController = controller;
-                         //          mapController.setMapStyle(_mapStyle);
+                                     mapController.setMapStyle(_mapStyle);
                                      },
                          markers: _markers,
 

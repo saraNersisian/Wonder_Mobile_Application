@@ -79,13 +79,12 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
           Navigator.push(
             context,
             MaterialPageRoute(builder: (context) =>SignUpScreen(title: 'My Sign Up Page')),);
-        },
+       },
         child: Text("Sign Up",
             textAlign: TextAlign.center,
             style: style.copyWith(
                 fontFamily:'ariel',fontSize: 19,color: Colors.white, fontWeight: FontWeight.bold)),
       ),
-
     );
 
     return Scaffold(
@@ -94,19 +93,19 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
         //to make the page fit great
         child: ConstrainedBox(
         constraints: BoxConstraints(maxHeight: MediaQuery.of(context).size.height),
-
       child: Row(
        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           Column(
-
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
-
             children: [
               SizedBox(
                 height: 80.0,
               ),
+
+             //add the logo here
+
               Text(
                 'W',
                 style: TextStyle(
@@ -124,19 +123,14 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
               SizedBox(
                 height: 150.0,
               ),
-
               loginButton, //defined above
-
               SizedBox(
                 height: 15.0,
               ),
-
               SignUpButton,   //defined above
-
               SizedBox(
                 height: 15.0,
               ),
-
             ], //column children
           ),
         ], //row children
