@@ -1,15 +1,16 @@
 {
   "project_info": {
     "project_number": "482424096719",
+    "firebase_url": "https://wonder-327823-default-rtdb.firebaseio.com",
     "project_id": "wonder-327823",
     "storage_bucket": "wonder-327823.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:482424096719:android:0f98fe4609786a597ab4ba",
+        "mobilesdk_app_id": "1:482424096719:android:eb5df6f892ea8df17ab4ba",
         "android_client_info": {
-          "package_name": "com.saranersisian.wonder_flutter"
+          "package_name": "com.nersisiansara.wonder"
         }
       },
       "oauth_client": [
@@ -29,6 +30,13 @@
             {
               "client_id": "482424096719-81e9jaqe5hcvi35nscjb0lunbdcv77mb.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "482424096719-ttdo7qa1pmik0c619gbuig22r8dhfgba.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.nersisiansara.wonder"
+              }
             }
           ]
         }

@@ -8,7 +8,7 @@
 
 
 
-       android:label="wonder_flutter"
+        android:label="Wonder"
         android:icon="@mipmap/launcher_icon">
         <activity
             android:name=".MainActivity"

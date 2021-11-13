@@ -398,7 +398,7 @@ class _MainMapScreenState extends State<MainMapScreen> {
                             ),
                           ],
                         ),
-                        margin: EdgeInsets.fromLTRB(20, 0, 210, 45),
+                        margin: EdgeInsets.fromLTRB(30, 0, 190, 45),
                         //alignment: Alignment(-0.75,0.87),
                         child: FloatingActionButton(
                           elevation: 30,
@@ -413,7 +413,7 @@ class _MainMapScreenState extends State<MainMapScreen> {
                         ),
                       ),
                       Container(
-                      margin: EdgeInsets.fromLTRB(0, 0, 30, 0),
+                      margin: EdgeInsets.fromLTRB(0, 0, 32, 0),
                         decoration: BoxDecoration(
                           color: Colors.transparent,
                           borderRadius: BorderRadius.all(
