@@ -198,6 +198,10 @@ class _MainMapScreenState extends State<MainMapScreen> {
                            onPressed: () async {
                              //Navigator.pop(context);
                              displayThis = textEditingController.text;
+                             mapController.animateCamera(
+                              CameraUpdate.newCameraPosition(
+                              CameraPosition(
+                                target: LatLng(latitude,longitude) ,zoom: 15.0),),);
                              setState(() {
                                _markers.add(
                                  Marker(
@@ -298,7 +302,7 @@ class _MainMapScreenState extends State<MainMapScreen> {
                           boxShadow: [
                             BoxShadow(
                               color: Colors.white.withOpacity(1),
-                              spreadRadius: 3,
+                              spreadRadius: 3 ,
                               blurRadius: 0,
                               offset: Offset(0.1, 0.5),
                             ),
@@ -336,9 +340,7 @@ class _MainMapScreenState extends State<MainMapScreen> {
                         ),
                      // alignment: Alignment(0.89,0.80),
                       child: FloatingActionButton(
-
                         elevation: 30,
-
                         onPressed: ()  {
                           Navigator.push(
                                       context,
