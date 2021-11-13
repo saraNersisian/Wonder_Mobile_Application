@@ -275,8 +275,8 @@ class _MainMapScreenState extends State<MainMapScreen> {
                              bearing: 0),
                          myLocationEnabled: true,
                          myLocationButtonEnabled: false,
-                         mapToolbarEnabled: true,
-                         zoomControlsEnabled: true,
+                         mapToolbarEnabled: false,
+                         zoomControlsEnabled: false,
                          //onMapCreated:_onMapCreated,
                          onMapCreated: (GoogleMapController controller) {
                                      mapController = controller;
@@ -286,12 +286,28 @@ class _MainMapScreenState extends State<MainMapScreen> {
 
                      ),
                   floatingActionButton:Wrap(
+
                     direction: Axis.horizontal,
                     children: <Widget>[
                       Container(
+                        decoration: BoxDecoration(
+                          color: Colors.transparent,
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(100),
+                          ),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.white.withOpacity(1),
+                              spreadRadius: 3,
+                              blurRadius: 0,
+                              offset: Offset(0.1, 0.5),
+                            ),
+                          ],
+                        ),
                         margin: EdgeInsets.fromLTRB(20, 0, 210, 45),
                         //alignment: Alignment(-0.75,0.87),
                         child: FloatingActionButton(
+                          elevation: 30,
                           onPressed: ()  {
                            mapController.animateCamera(
                            CameraUpdate.newCameraPosition(
@@ -304,8 +320,25 @@ class _MainMapScreenState extends State<MainMapScreen> {
                       ),
                       Container(
                       margin: EdgeInsets.fromLTRB(0, 0, 20, 0),
+                        decoration: BoxDecoration(
+                          color: Colors.transparent,
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(100),
+                          ),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.white.withOpacity(1),
+                              spreadRadius: 3,
+                              blurRadius: 0,
+                              offset: Offset(0.1, 0.5),
+                            ),
+                          ],
+                        ),
                      // alignment: Alignment(0.89,0.80),
                       child: FloatingActionButton(
+
+                        elevation: 30,
+
                         onPressed: ()  {
                           Navigator.push(
                                       context,
@@ -313,6 +346,7 @@ class _MainMapScreenState extends State<MainMapScreen> {
                                   },
                                   child: const Icon(Icons.chat),
                                   backgroundColor: Color(0xff33BDFF),
+
                                 ),
                          ),
                        ],
