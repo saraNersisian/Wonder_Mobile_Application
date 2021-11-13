@@ -1,3 +1,4 @@
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart' show rootBundle;
 //import 'package:location/location.dart';
@@ -13,7 +14,8 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:wonder_flutter/Screens/Chat/chat_page.dart';
 import 'package:flutter_awesome_alert_box/flutter_awesome_alert_box.dart';
 import 'dart:async';
-
+//import 'dart:html' ;
+import 'package:http/http.dart' as http;
 
 
 class MainMapScreen extends StatefulWidget {
@@ -26,17 +28,81 @@ class MainMapScreen extends StatefulWidget {
 class _MainMapScreenState extends State<MainMapScreen> {
   TextStyle style = TextStyle(fontFamily: 'Montserrat', fontSize: 20.0);
   late GoogleMapController mapController;
+  final _database = FirebaseDatabase.instance.reference();
 
 
   late String _mapStyle; // map style
   @override
   void initState() {
     super.initState();
-
+    //map mode
     rootBundle.loadString('assets/map_dark_mode.txt').then((string) {
       _mapStyle = string;
     });
-        //setCustomMapPin();
+    //custom map marker
+    //setCustomMapPin();
+    //loading all markers
+    _activeListeners();
+    // StreamBuilder(
+    //     stream:_database
+    //         .child('users/markers')
+    //         .orderByKey()
+    //         .limitToLast(5)
+    //         .onValue,
+    //     builder: (context, snapshot){
+    //       final tilesList = <ListTile>[];
+    //       if(snapshot.hasData){
+    //         final existingMarkers =
+    //             Map<double, dynamic>.from(
+    //                 (snapshot.data! as Event).snapshot.value);
+    //                 existingMarkers.forEach((key, value) {
+    //                   final nextMarker = Map<double, dynamic>.from(value);
+    //                   final markerTile = ListTile(
+    //                   //  title: ,   add the post here
+    //                   );
+    //                   tilesList.add(markerTile);
+    //                 });
+    //       }
+    //       return ListView(
+    //         children: tilesList,
+    //       );
+    //     }
+    // );
+  }
+
+   void _activeListeners() {
+  //   FirebaseDatabase.instance.reference().child("users/marker").onValue.listen((event) {
+  //      final data = new Map<double,dynamic>.from(event.snapshot.value);
+  //      final markersLat = data['marker/lat'] as double;
+  //      final markersLong = data['marker/long'] as double;
+  //     var latList = [];
+  //     var longList = [];
+  //     print("----------------------------");
+  //     markersLat.forEach((k, v) {
+  //       print(k);
+  //       print(v);
+  //       //markersList.add(v);
+  //     });
+
+
+
+      setState(() {
+        _markers.add(
+           Marker(
+             //create a custom marker id here
+               markerId: MarkerId("Marker_Id"),
+               position: LatLng(latitude,longitude),
+               //icon: pinLocationIcon,
+               onTap: () {
+                 showAlertDialog(context);
+               }
+             // infoWindow: InfoWindow(
+             //
+             //   title: displayThis,
+             // ),
+           ),
+        );
+      });
   }
 
   // @override
@@ -406,6 +472,8 @@ class _MainMapScreenState extends State<MainMapScreen> {
 
     );
   }
+
+ 
 
 
 }
