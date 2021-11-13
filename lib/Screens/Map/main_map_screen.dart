@@ -66,9 +66,6 @@ class _MainMapScreenState extends State<MainMapScreen> {
   }
 
 
-
-
-
    Set<Marker> _markers = {};
   //  late BitmapDescriptor pinLocationIcon;
   //
@@ -210,8 +207,8 @@ class _MainMapScreenState extends State<MainMapScreen> {
                              setState(() {
                                _markers.add(
                                  Marker(
-                                   //create a custom marker id
-                                     markerId: MarkerId("id_1"),
+                                   //create a custom marker id here
+                                     markerId: MarkerId("Marker_Id"),
                                      position: LatLng(latitude,longitude),
                                      //icon: pinLocationIcon,
                                      onTap: () {
@@ -228,7 +225,7 @@ class _MainMapScreenState extends State<MainMapScreen> {
                              //saving current marker into firebase
                              FirebaseUser user = await FirebaseAuth.instance.currentUser();
                              FirebaseDatabase.instance.reference().child("users/" + user.uid + "/marker")
-                                 .set({
+                                 .update({
                                "lat" : latitude,
                                "lon" : longitude,
                              })
@@ -238,10 +235,11 @@ class _MainMapScreenState extends State<MainMapScreen> {
                                print("Failed to create the marker!");
 
                              });
+
                              //save the text into firebase
-                             FirebaseDatabase.instance.reference().child("users/" + user.uid + "/text")
-                                 .set({
-                                "Text" : displayThis.toString(),
+                             FirebaseDatabase.instance.reference().child("users/" + user.uid + "/posts")
+                                 .update({
+                                "content" : displayThis.toString(),
                              })
                                  .then((value){
                                print("Successfully added the text ");
@@ -349,7 +347,7 @@ class _MainMapScreenState extends State<MainMapScreen> {
                         ),
                       ),
                       Container(
-                      margin: EdgeInsets.fromLTRB(0, 0, 20, 0),
+                      margin: EdgeInsets.fromLTRB(0, 0, 30, 0),
                         decoration: BoxDecoration(
                           color: Colors.transparent,
                           borderRadius: BorderRadius.all(
