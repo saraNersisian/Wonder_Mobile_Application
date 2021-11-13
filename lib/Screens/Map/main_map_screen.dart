@@ -36,6 +36,7 @@ class _MainMapScreenState extends State<MainMapScreen> {
     rootBundle.loadString('assets/map_dark_mode.txt').then((string) {
       _mapStyle = string;
     });
+        //setCustomMapPin();
   }
 
   // @override
@@ -62,17 +63,24 @@ class _MainMapScreenState extends State<MainMapScreen> {
     setState(() {
       _locationMessage = "${position.latitude}, ${position.longitude}";
     });
-
   }
 
 
-  Set<Marker> _markers = {};
-  late BitmapDescriptor mapMarker;
 
-  //putting a marker
-  void setCustomMarker() async{
-    mapMarker = await BitmapDescriptor.defaultMarker;
-  }
+
+
+   Set<Marker> _markers = {};
+  //  late BitmapDescriptor pinLocationIcon;
+  //
+  //
+  // //putting a marker
+  //  void setCustomMapPin() async{
+  //    pinLocationIcon = BitmapDescriptor.fromAssetImage(
+  //        ImageConfiguration(devicePixelRatio: 2.5),
+  //        'assets/orange-map-marker').then((onValue) {
+  //    }) as BitmapDescriptor;
+  //
+  // }
 
   var textEditingController = TextEditingController();
   var displayThis;
@@ -80,7 +88,6 @@ class _MainMapScreenState extends State<MainMapScreen> {
   void _onMapCreated(GoogleMapController controller){
 
   }
-
 
 
   showAlertDialog(BuildContext context) {
@@ -97,7 +104,6 @@ class _MainMapScreenState extends State<MainMapScreen> {
           MaterialPageRoute(builder: (context) => ChatPage(title: 'Chat page')),);
       },
     );
-
     // set up the AlertDialog
     AlertDialog alert = AlertDialog(
       title: Text("I am wondering ..."),
@@ -107,7 +113,6 @@ class _MainMapScreenState extends State<MainMapScreen> {
         closeButton,
       ],
     );
-
     // show the dialog
     showDialog(
       context: context,
@@ -208,6 +213,7 @@ class _MainMapScreenState extends State<MainMapScreen> {
                                    //create a custom marker id
                                      markerId: MarkerId("id_1"),
                                      position: LatLng(latitude,longitude),
+                                     //icon: pinLocationIcon,
                                      onTap: () {
                                        showAlertDialog(context);
                                      }
@@ -230,6 +236,17 @@ class _MainMapScreenState extends State<MainMapScreen> {
                                print("Successfully created the marker ");
                              }).catchError((error) {
                                print("Failed to create the marker!");
+
+                             });
+                             //save the text into firebase
+                             FirebaseDatabase.instance.reference().child("users/" + user.uid + "/text")
+                                 .set({
+                                "Text" : displayThis.toString(),
+                             })
+                                 .then((value){
+                               print("Successfully added the text ");
+                             }).catchError((error) {
+                               print("Failed to add the text");
 
                              });
                            },
@@ -285,6 +302,15 @@ class _MainMapScreenState extends State<MainMapScreen> {
                          onMapCreated: (GoogleMapController controller) {
                                      mapController = controller;
                                      mapController.setMapStyle(_mapStyle);
+                                     // setState(() {
+                                     //   _markers.add(
+                                     //       Marker(
+                                     //           markerId: MarkerId("1"),
+                                     //           position: LatLng(latitude,longitude),
+                                     //           icon: pinLocationIcon
+                                     //       )
+                                     //   );
+                                     // });
                                      },
                          markers: _markers,
 

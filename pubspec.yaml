@@ -73,6 +73,7 @@ flutter:
 
    - Image/blue.png
    - Image/W_logo.png
+   - Image/orange-map-marker.png
   #   - images/a_dot_ham.jpeg
    - assets/map_dark_mode.txt
 

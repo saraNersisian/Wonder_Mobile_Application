@@ -29,7 +29,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   var passwordController = TextEditingController();
   var usernameController = TextEditingController();
   var phoneNumberController = TextEditingController();
-  var msgController = TextEditingController();
+ // var msgController = TextEditingController();
   //var markerController = TextEditingController();
  // var zipCodeController = TextEditingController();
 
@@ -56,7 +56,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
               'username': usernameController.text,
               'email': emailController.text,
               'phone': phoneNumberController.text,
-              'msg': msgController.text,
+              //'msg': msgController.text,
               //'markerLocation': markerController.text,
               //'zipcode': zipCodeController.text,
 
