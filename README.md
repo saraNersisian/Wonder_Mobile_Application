@@ -6,7 +6,7 @@ The application is called "Wonder" because it will help people everywhere around
 The app is map based and users can create a thread asking a question regarding to a specific location in the map or area.
 Other users can see the thread and start a chat with the user in need of help. 
 
-
-## Getting Started
+First app demo Link:
+https://www.youtube.com/watch?v=WdTuFsY9_FQ&ab_channel=SaraNersisian
 
 
