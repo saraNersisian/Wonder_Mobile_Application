@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:wonder_flutter/Screens/Forgot Password/forgot_password_screen.dart';
 import 'package:wonder_flutter/Screens/Map/main_map_screen.dart';
+import 'package:wonder_flutter/Screens/Sign up/signup_screen.dart';
 //import 'package:commons/commons.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -180,6 +181,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           'Forgot Password?',
                           style: TextStyle(
                             color: Color(0xff808080),
+                            fontFamily: 'Poppins',
                             fontSize: 14,
                             //fontFamily: 'Poppins',
                           ),
@@ -191,9 +193,49 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
 
               SizedBox(
-                height: 50.0,
+                height: 40.0,
               ),
               loginButton,
+              Container(
+
+                margin:EdgeInsets.only(left:100),
+                //padding: EdgeInsets.fromLTRB(50,10,0,0),
+                child:
+                    Row(
+                      children: [
+                      Text(
+                      "Don't have an account?",
+                      // textAlign: TextAlign.left,
+                      style: TextStyle(
+                        fontSize: 15,
+                        color: Color(0xff808080),
+                        fontFamily: 'Poppins',
+                      ),
+                    ),
+
+                        TextButton(
+
+                          onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(builder: (context) =>SignUpScreen(title: 'My Sign Up Page')),);
+                            },
+                          child:
+                          const Text(
+                            'SIGN UP',
+                            style: TextStyle(
+                              color: Color(0xff33BDFF),
+                              fontSize: 15,
+                              fontFamily: 'Poppins',
+                            ),
+                          ),
+                        ),
+
+                      ],
+
+                    )
+              ),
+
 
 
             ],
