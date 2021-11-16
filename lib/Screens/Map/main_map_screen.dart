@@ -232,7 +232,8 @@ class _MainMapScreenState extends State<MainMapScreen> {
 
 
   @override
-  Widget build(BuildContext context) {
+
+  Widget build( BuildContext context) {
 
     BorderRadiusGeometry radius = BorderRadius.only(
         topLeft: Radius.circular(100.0),
@@ -242,14 +243,20 @@ class _MainMapScreenState extends State<MainMapScreen> {
     // return GestureDetector(
     //   onTap:()=>FocusScope.of(context).unfocus(),
     //   child: Material(
+    // showModalBottomSheet(
+    //     context: context,
+    //     builder: (context) {
     return Material(
-
-        child: Column(
-           children:[
+     // child: Column(
+     //       children:[
+      child: Stack(
+        alignment: Alignment.topCenter,
+        children: <Widget>[
              SlidingUpPanel(
                 backdropEnabled: true,
                 maxHeight: 200,
-                panel:Center (
+               panel:
+                Center (
                     child:Column(
                       children:<Widget> [
                         _buildTextField(),
@@ -328,7 +335,11 @@ class _MainMapScreenState extends State<MainMapScreen> {
                     ),
                   ),
                 collapsed:
-                Container(
+                // SingleChildScrollView(
+                //     reverse: true,  // add this line in scroll view
+                //     child:
+
+                    Container(
                       decoration: BoxDecoration(
                         color: Color(0xff33BDFF),
                         borderRadius: radius,
@@ -344,11 +355,15 @@ class _MainMapScreenState extends State<MainMapScreen> {
                         ),
                       ),
                     ),
-                minHeight: 50,
-                borderRadius: radius,
-                margin: const EdgeInsets.fromLTRB(30.0, 30.0, 30.0, 0.0),
+
+               // ),
+               minHeight: 50,
+               borderRadius: radius,
+               margin: const EdgeInsets.fromLTRB(30.0, 30.0, 30.0, 0.0),
+
 
                 body: Scaffold(
+                    //resizeToAvoidBottomInset: true,
                   body:
                   GoogleMap(
 
@@ -446,15 +461,25 @@ class _MainMapScreenState extends State<MainMapScreen> {
                     ),
                 ),
               ],
-            ),
-      );
+           ),
+        );
+     //   },
+     // );
+
   }
 
   Widget _buildTextField() {
     final maxLines = 5;
-    return Container(
+
+    return
+      Container(
+
       margin: EdgeInsets.fromLTRB(30, 30, 30, 10),
       height: maxLines * 20.0,
+        // child:Padding(
+        //   padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+
+
       child: TextField(
         controller: textEditingController,
         maxLines: maxLines,
@@ -470,8 +495,12 @@ class _MainMapScreenState extends State<MainMapScreen> {
         ),
       ),
 
+
+
     );
+
   }
+
 
  
 

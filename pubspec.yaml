@@ -42,6 +42,7 @@ dependencies:
   flutter_awesome_alert_box: ^2.1.1
   font_awesome_flutter: ^9.2.0
   sliding_up_panel: ^2.0.0+1
+
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.3
