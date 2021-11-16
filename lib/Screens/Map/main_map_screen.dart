@@ -91,7 +91,7 @@ class _MainMapScreenState extends State<MainMapScreen> {
            Marker(
              //create a custom marker id here
                markerId: MarkerId("Marker_Id"),
-               position: LatLng(latitude,longitude),
+               position: LatLng(latitude +1,longitude),
                //icon: pinLocationIcon,
                onTap: () {
                  showAlertDialog(context);
