@@ -7,6 +7,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:wonder_flutter/Screens/Login/login_screen.dart';
 import 'package:firebase_database/firebase_database.dart';
 //import 'package:commons/commons.dart';
+//import 'package:rich_alert/rich_alert.dart';
 
 
 
@@ -35,6 +36,36 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   @override
   Widget build(BuildContext context) {
+
+    Future<void> _showMyDialog() async {
+      return showDialog<void>(
+        context: context,
+        barrierDismissible: false, // user must tap button!
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text('Congratulations!'),
+            content: SingleChildScrollView(
+              child: ListBody(
+                children: const <Widget>[
+                  Text('Your account is created!'),
+                //  Text('Please Login now'),
+                ],
+              ),
+            ),
+            actions: <Widget>[
+              TextButton(
+                child: const Text('LOGIN'),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => LoginScreen(title: 'My Login Page')),);
+                },
+              ),
+            ],
+          );
+        },
+      );
+    }
 
     final SignUpButton = Material (
       elevation: 5.0,
@@ -67,10 +98,21 @@ class _SignUpScreenState extends State<SignUpScreen> {
             .then((value){
               print("Successfully created the profile info ");
              }).catchError((error) {
+
             print("Failed!");
 
             });
 
+            // showDialog(
+            //     context: context,
+            //     builder: (BuildContext context) {
+            //       return RichAlertDialog( //uses the custom alert dialog
+            //         alertTitle: richTitle("Alert title"),
+            //         alertSubtitle: richSubtitle("Subtitle"),
+            //         alertType: RichAlertType.WARNING,
+            //       );
+            //     }
+            // );
             // successDialog(
             //   context,
             //   "Account created successfully!",
@@ -83,6 +125,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
             //         MaterialPageRoute(builder: (context) =>LoginScreen(title: 'My Login Page')),);
             //   },
             // );
+            _showMyDialog();
 
            // Navigator.pop(context);
           }).catchError((error){
@@ -103,6 +146,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
     );
 
 
+
+
     return
         Scaffold(
         //resizeToAvoidBottomInset : false,
@@ -121,7 +166,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     Text(
                       'Sign Up',
                       style: TextStyle(
-                        fontSize: 40,
+                        fontSize: 50,
                         fontFamily: 'Poppins',
                       ),
                     ),
@@ -267,6 +312,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             // textAlign: TextAlign.left,
                             style: TextStyle(
                               fontSize: 14,
+                              color: Color(0xff808080),
                               fontFamily: 'Poppins',
                             ),
                           ),
@@ -290,7 +336,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               style: TextStyle(
                                 color: Color(0xff33BDFF),
                                 fontSize: 14,
-                                //fontFamily: 'Poppins',
+                                fontFamily: 'Poppins',
                               ),
                             ),
                           ),
