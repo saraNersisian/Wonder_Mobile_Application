@@ -16,6 +16,7 @@ import 'package:flutter_awesome_alert_box/flutter_awesome_alert_box.dart';
 import 'dart:async';
 //import 'dart:html' ;
 import 'package:http/http.dart' as http;
+import 'package:wonder_flutter/userProfile.dart';
 
 
 class MainMapScreen extends StatefulWidget {
@@ -320,6 +321,7 @@ class _MainMapScreenState extends State<MainMapScreen> {
                                print("Failed to add the text");
 
                              });
+
                            },
                            child: Text(
                                "Post",
@@ -457,7 +459,8 @@ class _MainMapScreenState extends State<MainMapScreen> {
                                 ),
                          ),
                        ],
-                      )
+                      ),
+
                     ),
                 ),
               ],

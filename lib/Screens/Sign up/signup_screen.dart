@@ -6,6 +6,7 @@ import 'package:flutter/src/material/text_button.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:wonder_flutter/Screens/Login/login_screen.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:wonder_flutter/userProfile.dart';
 //import 'package:commons/commons.dart';
 //import 'package:rich_alert/rich_alert.dart';
 
@@ -37,36 +38,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
   @override
   Widget build(BuildContext context) {
 
-    Future<void> _showMyDialog() async {
-      return showDialog<void>(
-        context: context,
-        barrierDismissible: false, // user must tap button!
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: const Text('Congratulations!'),
-            content: SingleChildScrollView(
-              child: ListBody(
-                children: const <Widget>[
-                  Text('Your account is created!'),
-                //  Text('Please Login now'),
-                ],
-              ),
-            ),
-            actions: <Widget>[
-              TextButton(
-                child: const Text('LOGIN'),
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => LoginScreen(title: 'My Login Page')),);
-                },
-              ),
-            ],
-          );
-        },
-      );
-    }
-
     final SignUpButton = Material (
       elevation: 5.0,
       borderRadius: BorderRadius.circular(30.0),
@@ -93,49 +64,75 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
             };
 
-          FirebaseDatabase.instance.reference().child("users/" + authResult.user.uid)
+            UserProfile(
+              uid: authResult.user.uid,
+              username: usernameController.text,
+              email: emailController.text,
+              phone: phoneNumberController.text,
+            );
+
+            FirebaseDatabase.instance.reference().child("users/" + authResult.user.uid)
             .set(userProfile)
             .then((value){
               print("Successfully created the profile info ");
              }).catchError((error) {
-
             print("Failed!");
-
             });
 
-            // showDialog(
-            //     context: context,
-            //     builder: (BuildContext context) {
-            //       return RichAlertDialog( //uses the custom alert dialog
-            //         alertTitle: richTitle("Alert title"),
-            //         alertSubtitle: richSubtitle("Subtitle"),
-            //         alertType: RichAlertType.WARNING,
-            //       );
-            //     }
-            // );
-            // successDialog(
-            //   context,
-            //   "Account created successfully!",
-            //   //negativeText: "Try Again",
-            //   //negativeAction: () {},
-            //   positiveText: "LOGIN",
-            //   positiveAction: () {
-            //     Navigator.push(
-            //         context,
-            //         MaterialPageRoute(builder: (context) =>LoginScreen(title: 'My Login Page')),);
-            //   },
-            // );
-            _showMyDialog();
 
-           // Navigator.pop(context);
+            showDialog<String>(
+                context: context,
+                barrierDismissible: false, // user must tap button!
+                builder: (BuildContext context) {
+              return AlertDialog(
+                title: const Text('Congratulations!'),
+                content: SingleChildScrollView(
+                  child: ListBody(
+                    children: const <Widget>[
+                      Text('Your account is created!'),
+                      //  Text('Please Login now'),
+                    ],
+                  ),
+                ),
+                actions: <Widget>[
+                  TextButton(
+                    child: const Text('LOGIN'),
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => LoginScreen(title: 'My Login Page')),);
+                    },
+                  ),
+                ],
+              );
+            },
+            );
+
           }).catchError((error){
             print("Failed to sign up!");
+            showDialog<String>(
+              context: context,
+              builder: (BuildContext context) => AlertDialog(
+                title: const Text('Failed To Sign Up'),
+                content: const Text("Email address is already in use."),
+                actions: <Widget>[
+                  TextButton(
+                    onPressed: () {
+                      Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => LoginScreen(title: 'My Login Page')),);
+                      },
+                    child: const Text('Login'),
+                  ),
+                  TextButton(
+                    onPressed: () => Navigator.pop(context, 'Try again'),
+                    child: const Text('Try Again'),
+                  ),
+                ],
+              ),
+            );
             print(error.toString());
           });
-
-    // Navigator.push(
-    // context,
-    // MaterialPageRoute(builder: (context) =>LoginScreen(title: 'My Login Page')),);},
 
         },
         child: Text("Create Account",
