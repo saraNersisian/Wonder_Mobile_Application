@@ -16,12 +16,14 @@ import 'package:flutter_awesome_alert_box/flutter_awesome_alert_box.dart';
 import 'dart:async';
 //import 'dart:html' ;
 import 'package:http/http.dart' as http;
+import 'package:wonder_flutter/Screens/myposts/myposts_screen.dart';
 import 'package:wonder_flutter/userProfile.dart';
 
 
 class MainMapScreen extends StatefulWidget {
   MainMapScreen({Key? key, required this.title}) : super(key: key);
   final String title;
+
   @override
   _MainMapScreenState createState() => _MainMapScreenState();
 }
@@ -300,8 +302,9 @@ class _MainMapScreenState extends State<MainMapScreen> {
                              FirebaseUser user = await FirebaseAuth.instance.currentUser();
                              FirebaseDatabase.instance.reference().child("users/" + user.uid + "/marker")
                                  .update({
-                               "lat" : latitude,
-                               "lon" : longitude,
+                               "latitude" : latitude,
+                               "longitude" : longitude,
+                               "posts" : displayThis.toString(),
                              })
                                  .then((value){
                                print("Successfully created the marker ");
@@ -311,16 +314,16 @@ class _MainMapScreenState extends State<MainMapScreen> {
                              });
 
                              //save the text into firebase
-                             FirebaseDatabase.instance.reference().child("users/" + user.uid + "/posts")
-                                 .update({
-                                "content" : displayThis.toString(),
-                             })
-                                 .then((value){
-                               print("Successfully added the text ");
-                             }).catchError((error) {
-                               print("Failed to add the text");
-
-                             });
+                             // FirebaseDatabase.instance.reference().child("users/" + user.uid + "/posts")
+                             //     .update({
+                             //    "content" : displayThis.toString(),
+                             // })
+                             //     .then((value){
+                             //   print("Successfully added the text ");
+                             // }).catchError((error) {
+                             //   print("Failed to add the text");
+                             //
+                             // });
 
                            },
                            child: Text(
@@ -364,8 +367,9 @@ class _MainMapScreenState extends State<MainMapScreen> {
                margin: const EdgeInsets.fromLTRB(30.0, 30.0, 30.0, 0.0),
 
 
-                body: Scaffold(
-                    //resizeToAvoidBottomInset: true,
+
+              body: Scaffold(
+                   resizeToAvoidBottomInset: false,
                   body:
                   GoogleMap(
 
@@ -397,70 +401,112 @@ class _MainMapScreenState extends State<MainMapScreen> {
 
                      ),
                   floatingActionButton:Wrap(
-
                     direction: Axis.horizontal,
                     children: <Widget>[
-                      Container(
-                        decoration: BoxDecoration(
-                          color: Colors.transparent,
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(100),
-                          ),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.white.withOpacity(1),
-                              spreadRadius: 3 ,
-                              blurRadius: 0,
-                              offset: Offset(0.1, 0.5),
-                            ),
-                          ],
-                        ),
-                        margin: EdgeInsets.fromLTRB(30, 0, 190, 45),
-                        //alignment: Alignment(-0.75,0.87),
-                        child: FloatingActionButton(
-                          elevation: 30,
-                          onPressed: ()  {
-                           mapController.animateCamera(
-                           CameraUpdate.newCameraPosition(
-                            CameraPosition(
-                                 target: LatLng(latitude,longitude) ,zoom: 15.0),),);
-                          },
-                          child: const Icon(Icons.location_on),
-                          backgroundColor: Color(0xff33BDFF),
-                        ),
-                      ),
-                      Container(
-                      margin: EdgeInsets.fromLTRB(0, 0, 32, 0),
-                        decoration: BoxDecoration(
-                          color: Colors.transparent,
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(100),
-                          ),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.white.withOpacity(1),
-                              spreadRadius: 3,
-                              blurRadius: 0,
-                              offset: Offset(0.1, 0.5),
-                            ),
-                          ],
-                        ),
-                     // alignment: Alignment(0.89,0.80),
-                      child: FloatingActionButton(
-                        elevation: 30,
-                        onPressed: ()  {
-                          Navigator.push(
-                                      context,
-                                      MaterialPageRoute(builder: (context) => ChatPage(title: 'Chat page')),);
-                                  },
-                                  child: const Icon(Icons.chat),
-                                  backgroundColor: Color(0xff33BDFF),
-
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                        //  Spacer(),
+                            Container(
+                            decoration: BoxDecoration(
+                              color: Colors.transparent,
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(100),
+                              ),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.white.withOpacity(1),
+                                  spreadRadius: 3 ,
+                                  blurRadius: 0,
+                                  offset: Offset(0.1, 0.5),
                                 ),
-                         ),
+                              ],
+                            ),
+                            margin: EdgeInsets.fromLTRB(30, 0, 0, 50),
+                            //alignment: Alignment(-0.75,0.87),
+                            child: FloatingActionButton(
+
+                              elevation: 30,
+                              onPressed: ()  {
+                                mapController.animateCamera(
+                                  CameraUpdate.newCameraPosition(
+                                    CameraPosition(
+                                        target: LatLng(latitude,longitude) ,zoom: 15.0),),);
+                              },
+                              child: const Icon(Icons.location_on, size: 30),
+                              backgroundColor: Color(0xff33BDFF),
+                            ),
+                          ),
+                          //Spacer(),
+                          Container(
+
+                             margin: EdgeInsets.fromLTRB(0, 0, 0, 50),
+                            decoration: BoxDecoration(
+                              color: Colors.transparent,
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(100),
+                              ),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.white.withOpacity(1),
+                                  spreadRadius: 3,
+                                  blurRadius: 0,
+                                  offset: Offset(0.1, 0.5),
+                                ),
+                              ],
+                            ),
+                            // alignment: Alignment(0.89,0.80),
+
+                            child: FloatingActionButton(
+                              elevation: 30,
+                              onPressed: ()  {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(builder: (context) => ChatPage(title: 'Chat page')),);
+                              },
+                              child: const Icon(Icons.chat, size: 30),
+                              backgroundColor: Color(0xff33BDFF),
+
+                            ),
+                          ),
+                         // Spacer(),
+                          Container(
+                            margin: EdgeInsets.fromLTRB(0, 0, 0, 50),
+                            decoration: BoxDecoration(
+                              color: Colors.transparent,
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(100),
+                              ),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.white.withOpacity(1),
+                                  spreadRadius: 3,
+                                  blurRadius: 0,
+                                  offset: Offset(0.1, 0.5),
+                                ),
+                              ],
+                            ),
+                            // alignment: Alignment(0.89,0.80),
+                            child: FloatingActionButton(
+                              elevation: 30,
+                              onPressed: ()  {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(builder: (context) => myPostsScreen(title: 'My posts')),);
+                              },
+
+                              child: Icon(Icons.account_circle, size:40 ),
+
+                              backgroundColor: Color(0xff33BDFF),
+
+                            ),
+                          ),
+
+                          //Spacer(),
+                         ],
+                        )
                        ],
                       ),
-
                     ),
                 ),
               ],
@@ -479,24 +525,28 @@ class _MainMapScreenState extends State<MainMapScreen> {
 
       margin: EdgeInsets.fromLTRB(30, 30, 30, 10),
       height: maxLines * 20.0,
-        // child:Padding(
-        //   padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+            //
+            // padding: EdgeInsets.only(
+            //     bottom: MediaQuery.of(context).viewInsets.bottom),
+      //child:SingleChildScrollView(
+        child: TextField(
+          controller: textEditingController,
+          maxLines: maxLines,
+          decoration: InputDecoration(
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(100.0),
+              borderSide: BorderSide.none,
+            ),
 
-
-      child: TextField(
-        controller: textEditingController,
-        maxLines: maxLines,
-        decoration: InputDecoration(
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(100.0),
-            borderSide: BorderSide.none,
+            labelText: "Enter a message ...",
+            fillColor: Color(0xffDDF4FF),
+            filled: true,
           ),
 
-          labelText: "Enter a message ...",
-          fillColor: Color(0xffDDF4FF),
-          filled: true,
         ),
-      ),
+
+      //)
+
 
 
 
