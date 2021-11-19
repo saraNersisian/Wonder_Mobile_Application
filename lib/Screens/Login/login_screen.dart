@@ -44,16 +44,27 @@ class _LoginScreenState extends State<LoginScreen> {
                 context,
                 MaterialPageRoute(builder: (context) => MainMapScreen(title: 'main map page')),);
           }).catchError((error){
-            //print("Login Failed!");
-            // errorDialog(
-            //             context,
-            //             "Wrong Email/Password ",
-            //             // negativeText: "Try Again",
-            //             // negativeAction: () {},
-            //         // positiveText: "Details",
-            //        // positiveAction: () {},
-            //         //print(error.toString());
-            //     );
+            showDialog<String>(
+              context: context,
+              builder: (BuildContext context) => AlertDialog(
+                title: const Text('Failed To Sign In'),
+                content: const Text("Invalid user/password."),
+                actions: <Widget>[
+                  TextButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => SignUpScreen(title: 'My Sign Up Page')),);
+                    },
+                    child: const Text('Sign Up'),
+                  ),
+                  TextButton(
+                    onPressed: () => Navigator.pop(context, 'Try again'),
+                    child: const Text('Try Again'),
+                  ),
+                ],
+              ),
+            );
               }
               );
           },
