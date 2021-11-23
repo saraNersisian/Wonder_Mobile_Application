@@ -45,116 +45,9 @@ class _MainMapScreenState extends State<MainMapScreen> {
     //custom map marker
     //setCustomMapPin();
     //loading all markers
+    getCurrentUser();
     _activeListeners();
-    // StreamBuilder(
-    //     stream:_database
-    //         .child('users/markers')
-    //         .orderByKey()
-    //         .limitToLast(5)
-    //         .onValue,
-    //     builder: (context, snapshot){
-    //       final tilesList = <ListTile>[];
-    //       if(snapshot.hasData){
-    //         final existingMarkers =
-    //             Map<double, dynamic>.from(
-    //                 (snapshot.data! as Event).snapshot.value);
-    //                 existingMarkers.forEach((key, value) {
-    //                   final nextMarker = Map<double, dynamic>.from(value);
-    //                   final markerTile = ListTile(
-    //                   //  title: ,   add the post here
-    //                   );
-    //                   tilesList.add(markerTile);
-    //                 });
-    //       }
-    //       return ListView(
-    //         children: tilesList,
-    //       );
-    //     }
-    // );
   }
-
-   void _activeListeners() {
-  //   FirebaseDatabase.instance.reference().child("users/marker").onValue.listen((event) {
-  //      final data = new Map<double,dynamic>.from(event.snapshot.value);
-  //      final markersLat = data['marker/lat'] as double;
-  //      final markersLong = data['marker/long'] as double;
-  //     var latList = [];
-  //     var longList = [];
-  //     print("----------------------------");
-  //     markersLat.forEach((k, v) {
-  //       print(k);
-  //       print(v);
-  //       //markersList.add(v);
-  //     });
-
-
-
-      setState(() {
-        _markers.add(
-           Marker(
-             //create a custom marker id here
-               markerId: MarkerId("Marker_Id"),
-               position: LatLng(latitude +1,longitude),
-               //icon: pinLocationIcon,
-               onTap: () {
-                 showAlertDialog(context);
-               }
-             // infoWindow: InfoWindow(
-             //
-             //   title: displayThis,
-             // ),
-           ),
-        );
-      });
-  }
-
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   _getCurrentLocation();
-  // }
-
-    _MainMapScreenState() {
-        _getCurrentLocation();
-      }
-
-    String _locationMessage = "";
-    //setting Los Angeles LatLng as an initial position
-    double latitude = 34.052235;
-    double longitude =  -118.243683;
-
-  void _getCurrentLocation() async {
-    final position = await Geolocator.getCurrentPosition( desiredAccuracy: LocationAccuracy.low, forceAndroidLocationManager: true);
-    // print("-----------------------------------");
-    // print(position);
-    latitude = position.latitude;
-    longitude = position.longitude;
-    setState(() {
-      _locationMessage = "${position.latitude}, ${position.longitude}";
-    });
-  }
-
-
-   Set<Marker> _markers = {};
-  //  late BitmapDescriptor pinLocationIcon;
-  //
-  //
-  // //putting a marker
-  //  void setCustomMapPin() async{
-  //    pinLocationIcon = BitmapDescriptor.fromAssetImage(
-  //        ImageConfiguration(devicePixelRatio: 2.5),
-  //        'assets/orange-map-marker').then((onValue) {
-  //    }) as BitmapDescriptor;
-  //
-  // }
-
-  var textEditingController = TextEditingController();
-  var displayThis;
-
-  void _onMapCreated(GoogleMapController controller){
-
-  }
-
 
   showAlertDialog(BuildContext context) {
     // set up the button
@@ -187,6 +80,122 @@ class _MainMapScreenState extends State<MainMapScreen> {
       },
     );
   }
+
+
+  var currentUserId ;
+
+    //getting current user
+    final FirebaseAuth _auth = FirebaseAuth.instance;
+    getCurrentUser() async {
+      final FirebaseUser user = await _auth.currentUser();
+      final uid = user.uid;
+      print(uid);
+      currentUserId = uid;
+
+  }
+
+
+  Set<Marker> _markers = {};
+   void _activeListeners() {
+     double latitude;
+     double longitude;
+     final db = FirebaseDatabase.instance.reference().child("users");
+     db.once().then((DataSnapshot snapshot) {
+
+       Map<dynamic, dynamic> values = snapshot.value;
+       values.forEach((key, values) async {
+           print(key);
+           print((values['marker'])["latitude"]);
+           print((values['marker'])["longitude"]);
+
+         //setState(() {
+           _markers.add(
+             Marker(
+                 position: LatLng((values['marker'])["latitude"], (values['marker'])["longitude"]),
+                 markerId: MarkerId(""),
+                 onTap: () {
+                     showAlertDialog(context);
+                 }),
+             ); //_markers.add
+         print("------------------------");
+           }
+         );
+       });
+    // });
+     }
+
+     //  setState(() {
+     //  //   _markers.add(
+     //  //   //    Marker(
+     //  //   //      //create a custom marker id here
+     //  //   //        markerId: MarkerId("Marker_Id"),
+     //  //   //        position: LatLng(latitude +1,longitude),
+     //  //   //        //icon: pinLocationIcon,
+     //  //   //        onTap: () {
+     //  //   //          showAlertDialog(context);
+     //  //   //        }
+     //  //   //      // infoWindow: InfoWindow(
+     //  //   //      //
+     //  //   //      //   title: displayThis,
+     //  //   //      // ),
+     //  //   //    ),
+     //  //   // );
+     // });
+     // //}
+
+
+
+
+
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   _getCurrentLocation();
+  // }
+
+    _MainMapScreenState() {
+        _getCurrentLocation();
+      }
+
+    String _locationMessage = "";
+    //setting Los Angeles LatLng as an initial position
+    double latitude = 34.052235;
+    double longitude =  -118.243683;
+
+  void _getCurrentLocation() async {
+    final position = await Geolocator.getCurrentPosition( desiredAccuracy: LocationAccuracy.low, forceAndroidLocationManager: true);
+    // print("-----------------------------------");
+    // print(position);
+    latitude = position.latitude;
+    longitude = position.longitude;
+    setState(() {
+      _locationMessage = "${position.latitude}, ${position.longitude}";
+    });
+  }
+
+
+   // Set<Marker> _markers = {};
+  //  late BitmapDescriptor pinLocationIcon;
+  //
+  //
+  // //putting a marker
+  //  void setCustomMapPin() async{
+  //    pinLocationIcon = BitmapDescriptor.fromAssetImage(
+  //        ImageConfiguration(devicePixelRatio: 2.5),
+  //        'assets/orange-map-marker').then((onValue) {
+  //    }) as BitmapDescriptor;
+  //
+  // }
+
+  var textEditingController = TextEditingController();
+  var displayThis;
+
+  void _onMapCreated(GoogleMapController controller){
+
+  }
+
+
+
 
 
   // var friendList = [];
@@ -284,7 +293,7 @@ class _MainMapScreenState extends State<MainMapScreen> {
                                _markers.add(
                                  Marker(
                                    //create a custom marker id here
-                                     markerId: MarkerId("Marker_Id"),
+                                     markerId: currentUserId,
                                      position: LatLng(latitude,longitude),
                                      //icon: pinLocationIcon,
                                      onTap: () {
@@ -376,13 +385,13 @@ class _MainMapScreenState extends State<MainMapScreen> {
                          mapType: MapType.normal,
                          initialCameraPosition: CameraPosition(
                              target: LatLng(latitude,longitude) ,
-                             zoom: 8.0,
-                             tilt: 0,
+                             zoom: 12.0,
+                             tilt:0,
                              bearing: 0),
                          myLocationEnabled: true,
                          myLocationButtonEnabled: false,
                          mapToolbarEnabled: false,
-                         zoomControlsEnabled: false,
+                         zoomControlsEnabled: true,
                          //onMapCreated:_onMapCreated,
                          onMapCreated: (GoogleMapController controller) {
                                      mapController = controller;
