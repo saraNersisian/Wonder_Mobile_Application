@@ -38,8 +38,23 @@ class ChatPage extends StatefulWidget {
 
 class _ChatPageState extends State<ChatPage> {
   List<types.Message> _messages = [];
+
+  var currentUserId ;
+  _chatPageState(){
+    //getting current user
+    final FirebaseAuth _auth = FirebaseAuth.instance;
+    getCurrentUser() async {
+      final FirebaseUser user = await _auth.currentUser();
+      final uid = user.uid;
+      print(uid);
+      currentUserId = uid;
+    }
+  }
+
+
   //the current user should be placed here
-  final _user = const types.User(id: '06c33e8b-e835-4736-80f4-63f44b66666c');
+ final _user = const types.User(id: '06c33e8b-e835-4736-80f4-63f44b66666c');
+  //final _user =  types.User(id:currentUserId.toString());
 
   @override
   void initState() {

@@ -40,12 +40,6 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    //SizeConfig().init(context); //for the screen sizing
-
-    // child: Container(
-    //   height: SizeConfig.safeBlockVertical * 25,
-    //   width: SizeConfig.safeBlockHorizontal * 55,
-    // );
 
     final loginButton = Material (
       elevation: 5.0,
@@ -53,7 +47,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
       color: Color(0xff33BDFF),
       child: MaterialButton(
         //minWidth: MediaQuery.of(context).size.width,
-        minWidth: 350,
+        minWidth: 330,
         padding: EdgeInsets.fromLTRB(15.0, 15.0, 15.0, 15.0),
         onPressed: () {
           Navigator.push(
@@ -73,7 +67,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
       //color: Color(0xff01A0C7),
       color: Color(0xff33BDFF),
       child: MaterialButton(
-        minWidth: 350,
+        minWidth: 330,
         padding: EdgeInsets.fromLTRB(15.0, 15.0, 15.0, 15.0),
         onPressed: () {
           Navigator.push(
@@ -96,13 +90,16 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
       child: Row(
        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
+
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
+
+              Expanded(child:
               SizedBox(
-                height: 80.0,
-              ),
+                //height: 150.0,
+              ),),
 
              //add the logo here
 
@@ -120,17 +117,25 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                   fontFamily: 'Poppins',
                 ),
               ),
-              SizedBox(
-                height: 150.0,
+              Expanded(
+                child: SizedBox(),
               ),
-              loginButton, //defined above
+              // SizedBox(
+              //   height: 150.0,
+              // ),
+              loginButton,
+               //defined above
               SizedBox(
                 height: 15.0,
               ),
               SignUpButton,   //defined above
-              SizedBox(
-                height: 15.0,
-              ),
+              // SizedBox(
+              //   height: 15.0,
+              // ),
+              Expanded(
+                child: SizedBox(
+                //height: 150.0,
+              ),),
             ], //column children
           ),
         ], //row children

@@ -44,7 +44,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
       color: Color(0xff33BDFF),
       child: MaterialButton(
         //minWidth: MediaQuery.of(context).size.width,
-        minWidth: 350,
+        minWidth: 330,
         padding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
         onPressed: () {
           //firebase authentication
@@ -157,9 +157,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
               children: [
                 Column(
                   children: [
-                    SizedBox(
-                      height: 80.0,
-                    ),
+                    // SizedBox(
+                    //   height: 80.0,
+                    // ),
                     Text(
                       'Sign Up',
                       style: TextStyle(
@@ -286,22 +286,18 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     SizedBox(
                       height: 40.0,
                     ),
+
                     Container(
                       child:
                       SignUpButton,
                     ),
 
                     Row(
-
-                      mainAxisAlignment: MainAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children:  <Widget>[
                         //Expanded(
-                        //flex: 2,
-
-
                         Container(
-
-                          padding: EdgeInsets.fromLTRB(130,9,0,10),
+                          //padding: EdgeInsets.fromLTRB(105,9,0,10),
                           child:
                           Text(
 

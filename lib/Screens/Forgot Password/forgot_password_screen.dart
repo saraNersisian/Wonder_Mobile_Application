@@ -6,8 +6,6 @@ import 'package:firebase_database/firebase_database.dart';
 
 class ForgotPasswordScreen extends StatefulWidget {
   ForgotPasswordScreen({Key? key, required this.title}) : super(key: key);
-
-
   final String title;
 
   @override
@@ -20,14 +18,13 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   @override
   Widget build(BuildContext context) {
 
-
     final SendRestLinkButton = Material (
       elevation: 5.0,
       borderRadius: BorderRadius.circular(30.0),
       color: Color(0xff33BDFF),
       child: MaterialButton(
         //minWidth: MediaQuery.of(context).size.width,
-        minWidth:350,
+        minWidth:330,
         padding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
         onPressed: () {
           Navigator.push(
@@ -43,43 +40,16 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
 
     return Scaffold(
 
-      // body: Container(
-      //   decoration: BoxDecoration(
-      //     image: DecorationImage(
-      //     //  image: AssetImage("Image/blue.png"),
-      //       image: NetworkImage("https://i.pinimg.com/564x/a8/2f/15/a82f15a713dfce6a3402332d953e3b9b.jpg"),
-      //       fit:BoxFit.cover,
-      //       colorFilter: ColorFilter.mode(
-      //         Colors.black.withOpacity(0.5),
-      //         BlendMode.darken,
-      //       )
-      //     )
-      //
-      //   ),
-      //   child: Column(
-      //     crossAxisAlignment: CrossAxisAlignment.stretch,
-      //     children: [
-      //       Container(height: 100, width: 100,),
-      //     ],
-      //   ),
-      //
-      // ),
         body: SingleChildScrollView(
         //to make the page fit great
         child: ConstrainedBox(
         constraints: BoxConstraints(maxHeight: MediaQuery.of(context).size.height),
-
-
-
-
       child: Column(
         //mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-
           Column(
             children: [
-
               Container(
                 child:Text(
                 'Forgot Password?',
@@ -87,73 +57,56 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                   fontSize: 30,
                   fontFamily: 'Poppins',
                 ),
-
               ),
             ),
-
-                  SizedBox(
+              SizedBox(
                 height: 10.0,
-              ),
-
-
-
+                  ),
              Container(
                margin: EdgeInsets.only(left: 35, right: 35, bottom: 10, top: 0),
 
                   child: Text(
                     "Enter the email address associated with this account. ",
                     style: TextStyle(
-
-                      fontSize: 14,
-                      fontFamily: 'Poppins',
-                      color: Color(0xff808080),
-
-              ),
+                            fontSize: 14,
+                            fontFamily: 'Poppins',
+                            color: Color(0xff808080),
+                          ),
                     textAlign: TextAlign.center,
                   ),
-             ),
-
+               ),
               Container(
                 margin: EdgeInsets.only(left: 35, right: 35, bottom: 10, top: 60),
                 child:
                 TextField(
                   decoration: InputDecoration(
                     border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(20.0),
+                      borderRadius: BorderRadius.circular(30.0),
                       borderSide: BorderSide.none,
                     ),
                     filled: true,
                     fillColor: Color(0xffDDF4FF),
                     labelText: "Email",
                     labelStyle: TextStyle(
-
-                      fontSize: 16,
-                               ),
+                      fontSize: 16,),
                     prefixIcon: Icon(
                       FontAwesomeIcons.solidEnvelope,
                       color: Colors.grey,
                       size:19,
                     ),
                   ),
-
                 ),
               ),
-
-
-
           SizedBox(
             height: 20.0,
           ),
-
               SendRestLinkButton,
-        ],
-    ),
-
-    ],
-
-      ),
+             ],
+            ),
+           ],
+          ),
+         ),
         ),
-        ),
-    );
+       );
   }
 }

@@ -33,7 +33,7 @@ class _LoginScreenState extends State<LoginScreen> {
       color: Color(0xff33BDFF),
       child: MaterialButton(
         //minWidth: MediaQuery.of(context).size.width,
-        minWidth: 350,
+        minWidth: 330,
         padding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
         onPressed: () {
           FirebaseAuth.instance.signInWithEmailAndPassword(
@@ -175,10 +175,10 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
 
                     Container(
-                      //margin: EdgeInsets.only(right:100.0) ,
-                      width: 400.0,
+                      margin: EdgeInsets.only(left:200.0) ,
+                      width: 200.0,
                       height: 40.0,
-                    alignment: Alignment.centerRight,
+                    //alignment: Alignment.centerRight,
                     child:
                       TextButton(
 
@@ -193,7 +193,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           style: TextStyle(
                             color: Color(0xff808080),
                             fontFamily: 'Poppins',
-                            fontSize: 14,
+                            fontSize: 13,
                             //fontFamily: 'Poppins',
                           ),
                         ),
@@ -218,7 +218,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       "Don't have an account?",
                       // textAlign: TextAlign.left,
                       style: TextStyle(
-                        fontSize: 15,
+                        fontSize: 13,
                         color: Color(0xff808080),
                         fontFamily: 'Poppins',
                       ),
