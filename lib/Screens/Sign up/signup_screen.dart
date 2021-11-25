@@ -314,10 +314,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         // ),
                         Expanded(
                           flex: 0,
-
                           child:
                           TextButton(
-
                             onPressed: () {
                               Navigator.push(
                                 context,
