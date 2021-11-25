@@ -1,4 +1,3 @@
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart' show rootBundle;
 //import 'package:location/location.dart';
@@ -18,6 +17,7 @@ import 'dart:async';
 import 'package:http/http.dart' as http;
 import 'package:wonder_flutter/Screens/myposts/myposts_screen.dart';
 import 'package:wonder_flutter/userProfile.dart';
+import 'package:custom_info_window/custom_info_window.dart';
 
 
 class MainMapScreen extends StatefulWidget {
@@ -55,20 +55,20 @@ class _MainMapScreenState extends State<MainMapScreen> {
       child: Text("Close"),
       onPressed: () => Navigator.pop(context, true),
     );
-    Widget replyButton = TextButton(
-      child: Text("Reply"),
-      onPressed: (){
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => ChatPage(title: 'Chat page')),);
-      },
-    );
+    // Widget replyButton = TextButton(
+    //   child: Text("Reply"),
+    //   onPressed: (){
+    //     Navigator.push(
+    //       context,
+    //       MaterialPageRoute(builder: (context) => ChatPage(title: 'Chat page')),);
+    //   },
+    // );
     // set up the AlertDialog
     AlertDialog alert = AlertDialog(
       title: Text("I am wondering ..."),
       content: Text(displayThis),
       actions: [
-        replyButton,
+       // replyButton,
         closeButton,
       ],
     );
@@ -84,64 +84,73 @@ class _MainMapScreenState extends State<MainMapScreen> {
 
   var currentUserId ;
 
-    //getting current user
-    final FirebaseAuth _auth = FirebaseAuth.instance;
-    getCurrentUser() async {
-      final FirebaseUser user = await _auth.currentUser();
-      final uid = user.uid;
-      print(uid);
-      currentUserId = uid;
+  //getting current user
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  getCurrentUser() async {
+    final FirebaseUser user = await _auth.currentUser();
+    final uid = user.uid;
+    print(uid);
+    currentUserId = uid;
 
   }
 
-
+  CustomInfoWindowController _customInfoWindowController =
+  CustomInfoWindowController();
+  var post;
   Set<Marker> _markers = {};
-   void _activeListeners() {
-     double latitude;
-     double longitude;
-     final db = FirebaseDatabase.instance.reference().child("users");
-     db.once().then((DataSnapshot snapshot) {
+  void _activeListeners() {
+    double latitude;
+    double longitude;
+    final db = FirebaseDatabase.instance.reference().child("users");
+    db.once().then((DataSnapshot snapshot) {
 
-       Map<dynamic, dynamic> values = snapshot.value;
-       values.forEach((key, values) async {
-           print(key);
-           print((values['marker'])["latitude"]);
-           print((values['marker'])["longitude"]);
+      Map<dynamic, dynamic> values = snapshot.value;
+      values.forEach((key, values) async {
+        print(key);
+        print((values['marker'])["latitude"]);
+        print((values['marker'])["longitude"]);
+        post = (values['marker'])["posts"];
 
-         //setState(() {
-           _markers.add(
-             Marker(
-                 position: LatLng((values['marker'])["latitude"], (values['marker'])["longitude"]),
-                 markerId: MarkerId(""),
-                 onTap: () {
-                     showAlertDialog(context);
-                 }),
-             ); //_markers.add
-         print("------------------------");
-           }
-         );
-       });
-    // });
-     }
+        setState(() {
+        _markers.add(
+          Marker(
+              position: LatLng((values['marker'])["latitude"], (values['marker'])["longitude"]),
+              markerId: MarkerId(key),
+              infoWindow: InfoWindow(
+                title: post.toString(),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => ChatPage(title: 'Chat page')),);
+                }
+               ),
+              ),
+        ); //_markers.add
+        print("------------------------");
+      }
+      );
+     });
+    });
+  }
 
-     //  setState(() {
-     //  //   _markers.add(
-     //  //   //    Marker(
-     //  //   //      //create a custom marker id here
-     //  //   //        markerId: MarkerId("Marker_Id"),
-     //  //   //        position: LatLng(latitude +1,longitude),
-     //  //   //        //icon: pinLocationIcon,
-     //  //   //        onTap: () {
-     //  //   //          showAlertDialog(context);
-     //  //   //        }
-     //  //   //      // infoWindow: InfoWindow(
-     //  //   //      //
-     //  //   //      //   title: displayThis,
-     //  //   //      // ),
-     //  //   //    ),
-     //  //   // );
-     // });
-     // //}
+  //  setState(() {
+  //  //   _markers.add(
+  //  //   //    Marker(
+  //  //   //      //create a custom marker id here
+  //  //   //        markerId: MarkerId("Marker_Id"),
+  //  //   //        position: LatLng(latitude +1,longitude),
+  //  //   //        //icon: pinLocationIcon,
+  //  //   //        onTap: () {
+  //  //   //          showAlertDialog(context);
+  //  //   //        }
+  //  //   //      // infoWindow: InfoWindow(
+  //  //   //      //
+  //  //   //      //   title: displayThis,
+  //  //   //      // ),
+  //  //   //    ),
+  //  //   // );
+  // });
+  // //}
 
 
 
@@ -153,14 +162,14 @@ class _MainMapScreenState extends State<MainMapScreen> {
   //   _getCurrentLocation();
   // }
 
-    _MainMapScreenState() {
-        _getCurrentLocation();
-      }
+  _MainMapScreenState() {
+    _getCurrentLocation();
+  }
 
-    String _locationMessage = "";
-    //setting Los Angeles LatLng as an initial position
-    double latitude = 34.052235;
-    double longitude =  -118.243683;
+  String _locationMessage = "";
+  //setting Los Angeles LatLng as an initial position
+  double latitude = 34.052235;
+  double longitude =  -118.243683;
 
   void _getCurrentLocation() async {
     final position = await Geolocator.getCurrentPosition( desiredAccuracy: LocationAccuracy.low, forceAndroidLocationManager: true);
@@ -174,7 +183,7 @@ class _MainMapScreenState extends State<MainMapScreen> {
   }
 
 
-   // Set<Marker> _markers = {};
+  // Set<Marker> _markers = {};
   //  late BitmapDescriptor pinLocationIcon;
   //
   //
@@ -198,59 +207,14 @@ class _MainMapScreenState extends State<MainMapScreen> {
 
 
 
-  // var friendList = [];
-  //
-  // void refreshFriendList() {
-  //   // load all the friends from Firebase Database and display them in the ListView
-  //   FirebaseDatabase.instance.reference().child("users").once()
-  //       .then((datasnapshot ) {
-  //     // print("Successfully loaded the data");
-  //     // print(datasnapshot);
-  //     // print("Key:");
-  //     // print(datasnapshot.key);
-  //     // print("Value:");
-  //     // print(datasnapshot.value);
-  //     // print("Iterating the value map:");
-  //
-  //     var friendTmpList = [];
-  //       datasnapshot.value.forEach((k, v) {
-  //       print("----------------------------------------");
-  //       print(k);
-  //       print(v);
-  //
-  //       friendTmpList.add(v);
-  //     });
-  //     print("Final Friend List: ");
-  //     print(friendTmpList);
-  //     friendList = friendTmpList;
-  //     setState(() {
-  //        FirebaseAuth.instance.currentUser().then((value) {
-  //     //     print(value);
-  //            var uid = value.uid;
-  //     //     print("uid: " + uid);
-  //            var userInfo = datasnapshot.value[uid];
-  //            UserProfile.currentUser = userInfo;
-  //     //     print("Current user info: " + userInfo.toString());
-  //   }).catchError((error) {
-  //         print("Failed to get the user info");
-  //         print(error);
-  //       });
-  //     });
-  //   }).catchError((error) {
-  //     print("Failed to load the data!");
-  //     print(error);
-  //   });
-  // }
-
-
   @override
 
   Widget build( BuildContext context) {
 
     BorderRadiusGeometry radius = BorderRadius.only(
-        topLeft: Radius.circular(100.0),
-        topRight: Radius.circular(100.0),
-        );
+      topLeft: Radius.circular(100.0),
+      topRight: Radius.circular(100.0),
+    );
 
     // return GestureDetector(
     //   onTap:()=>FocusScope.of(context).unfocus(),
@@ -259,270 +223,270 @@ class _MainMapScreenState extends State<MainMapScreen> {
     //     context: context,
     //     builder: (context) {
     return Material(
-     // child: Column(
-     //       children:[
+      // child: Column(
+      //       children:[
       child: Stack(
         alignment: Alignment.topCenter,
         children: <Widget>[
-             SlidingUpPanel(
-                backdropEnabled: true,
-                maxHeight: 200,
-               panel:
-                Center (
-                    child:Column(
-                      children:<Widget> [
-                        _buildTextField(),
-                       Container(
-                         width: 200,   //post button width
-                         child:
-                         ElevatedButton(
+          SlidingUpPanel(
+            backdropEnabled: true,
+            maxHeight: 200,
+            panel:
+            Center (
+              child:Column(
+                children:<Widget> [
+                  _buildTextField(),
+                  Container(
+                    width: 200,   //post button width
+                    child:
+                    ElevatedButton(
 
-                           style: ElevatedButton.styleFrom(
-                             shape: new RoundedRectangleBorder(
-                               borderRadius: new BorderRadius.circular(100.0),
-                             ),
-                           ),
-                           onPressed: () async {
-                             //Navigator.pop(context);
-                             displayThis = textEditingController.text;
-                             mapController.animateCamera(
-                              CameraUpdate.newCameraPosition(
-                              CameraPosition(
-                                target: LatLng(latitude,longitude) ,zoom: 15.0),),);
-                             setState(() {
-                               _markers.add(
-                                 Marker(
-                                   //create a custom marker id here
-                                     markerId: currentUserId,
-                                     position: LatLng(latitude,longitude),
-                                     //icon: pinLocationIcon,
-                                     onTap: () {
-                                       showAlertDialog(context);
-                                     }
-                                   // infoWindow: InfoWindow(
-                                   //
-                                   //   title: displayThis,
-                                   // ),
-                                 ),
-                               );
-                             });
-
-                             //saving current marker into firebase
-                             FirebaseUser user = await FirebaseAuth.instance.currentUser();
-                             FirebaseDatabase.instance.reference().child("users/" + user.uid + "/marker")
-                                 .update({
-                               "latitude" : latitude,
-                               "longitude" : longitude,
-                               "posts" : displayThis.toString(),
-                             })
-                                 .then((value){
-                               print("Successfully created the marker ");
-                             }).catchError((error) {
-                               print("Failed to create the marker!");
-
-                             });
-
-                             //save the text into firebase
-                             // FirebaseDatabase.instance.reference().child("users/" + user.uid + "/posts")
-                             //     .update({
-                             //    "content" : displayThis.toString(),
-                             // })
-                             //     .then((value){
-                             //   print("Successfully added the text ");
-                             // }).catchError((error) {
-                             //   print("Failed to add the text");
-                             //
-                             // });
-
-                           },
-                           child: Text(
-                               "Post",
-                               style: TextStyle(
-                                fontSize: 16,
-                               //fontFamily: 'Poppins',
-                               color: Colors.white,
-                             ),
-                           ),
-                         ),
-                       )
-                      ],
-                    ),
-                  ),
-                collapsed:
-                // SingleChildScrollView(
-                //     reverse: true,  // add this line in scroll view
-                //     child:
-
-                    Container(
-                      decoration: BoxDecoration(
-                        color: Color(0xff33BDFF),
-                        borderRadius: radius,
+                      style: ElevatedButton.styleFrom(
+                        shape: new RoundedRectangleBorder(
+                          borderRadius: new BorderRadius.circular(100.0),
+                        ),
                       ),
-                      child: Center(
-                        child: Text(
-                          "Swip Up to Create a Post",
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontFamily: 'Poppins',
-                            color: Colors.white,
-                          ),
+                      onPressed: () async {
+                        //Navigator.pop(context);
+                        displayThis = textEditingController.text;
+                        mapController.animateCamera(
+                          CameraUpdate.newCameraPosition(
+                            CameraPosition(
+                                target: LatLng(latitude,longitude) ,zoom: 15.0),),);
+                        setState(() {
+                          _markers.add(
+                            Marker(
+                              //create a custom marker id here
+                                markerId: MarkerId(currentUserId),
+                                position: LatLng(latitude,longitude),
+                                //icon: pinLocationIcon,
+                                onTap: () {
+                                  showAlertDialog(context);
+                                }
+                              // infoWindow: InfoWindow(
+                              //
+                              //   title: displayThis,
+                              // ),
+                            ),
+                          );
+                        });
+
+                        //saving current marker into firebase
+                        FirebaseUser user = await FirebaseAuth.instance.currentUser();
+                        FirebaseDatabase.instance.reference().child("users/" + user.uid + "/marker")
+                            .update({
+                          "latitude" : latitude,
+                          "longitude" : longitude,
+                          "posts" : displayThis.toString(),
+                        })
+                            .then((value){
+                          print("Successfully created the marker ");
+                        }).catchError((error) {
+                          print("Failed to create the marker!");
+
+                        });
+
+                        //save the text into firebase
+                        // FirebaseDatabase.instance.reference().child("users/" + user.uid + "/posts")
+                        //     .update({
+                        //    "content" : displayThis.toString(),
+                        // })
+                        //     .then((value){
+                        //   print("Successfully added the text ");
+                        // }).catchError((error) {
+                        //   print("Failed to add the text");
+                        //
+                        // });
+
+                      },
+                      child: Text(
+                        "Post",
+                        style: TextStyle(
+                          fontSize: 16,
+                          //fontFamily: 'Poppins',
+                          color: Colors.white,
                         ),
                       ),
                     ),
+                  )
+                ],
+              ),
+            ),
+            collapsed:
+            // SingleChildScrollView(
+            //     reverse: true,  // add this line in scroll view
+            //     child:
 
-               // ),
-               minHeight: 50,
-               borderRadius: radius,
-               margin: const EdgeInsets.fromLTRB(30.0, 30.0, 30.0, 0.0),
-
-
-
-              body: Scaffold(
-                   resizeToAvoidBottomInset: false,
-                  body:
-                  GoogleMap(
-
-                         mapType: MapType.normal,
-                         initialCameraPosition: CameraPosition(
-                             target: LatLng(latitude,longitude) ,
-                             zoom: 12.0,
-                             tilt:0,
-                             bearing: 0),
-                         myLocationEnabled: true,
-                         myLocationButtonEnabled: false,
-                         mapToolbarEnabled: false,
-                         zoomControlsEnabled: true,
-                         //onMapCreated:_onMapCreated,
-                         onMapCreated: (GoogleMapController controller) {
-                                     mapController = controller;
-                                     mapController.setMapStyle(_mapStyle);
-                                     // setState(() {
-                                     //   _markers.add(
-                                     //       Marker(
-                                     //           markerId: MarkerId("1"),
-                                     //           position: LatLng(latitude,longitude),
-                                     //           icon: pinLocationIcon
-                                     //       )
-                                     //   );
-                                     // });
-                                     },
-                         markers: _markers,
-
-                     ),
-                  floatingActionButton:Wrap(
-                    direction: Axis.horizontal,
-                    children: <Widget>[
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                        //  Spacer(),
-                            Container(
-                            decoration: BoxDecoration(
-                              color: Colors.transparent,
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(100),
-                              ),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.white.withOpacity(1),
-                                  spreadRadius: 3 ,
-                                  blurRadius: 0,
-                                  offset: Offset(0.1, 0.5),
-                                ),
-                              ],
-                            ),
-                            margin: EdgeInsets.fromLTRB(30, 0, 0, 50),
-                            //alignment: Alignment(-0.75,0.87),
-                            child: FloatingActionButton(
-
-                              elevation: 30,
-                              onPressed: ()  {
-                                mapController.animateCamera(
-                                  CameraUpdate.newCameraPosition(
-                                    CameraPosition(
-                                        target: LatLng(latitude,longitude) ,zoom: 15.0),),);
-                              },
-                              child: const Icon(Icons.location_on, size: 30),
-                              backgroundColor: Color(0xff33BDFF),
-                            ),
-                          ),
-                          //Spacer(),
-                          Container(
-
-                             margin: EdgeInsets.fromLTRB(0, 0, 0, 50),
-                            decoration: BoxDecoration(
-                              color: Colors.transparent,
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(100),
-                              ),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.white.withOpacity(1),
-                                  spreadRadius: 3,
-                                  blurRadius: 0,
-                                  offset: Offset(0.1, 0.5),
-                                ),
-                              ],
-                            ),
-                            // alignment: Alignment(0.89,0.80),
-
-                            child: FloatingActionButton(
-                              elevation: 30,
-                              onPressed: ()  {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(builder: (context) => ChatPage(title: 'Chat page')),);
-                              },
-                              child: const Icon(Icons.chat, size: 30),
-                              backgroundColor: Color(0xff33BDFF),
-
-                            ),
-                          ),
-                         // Spacer(),
-                          Container(
-                            margin: EdgeInsets.fromLTRB(0, 0, 0, 50),
-                            decoration: BoxDecoration(
-                              color: Colors.transparent,
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(100),
-                              ),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.white.withOpacity(1),
-                                  spreadRadius: 3,
-                                  blurRadius: 0,
-                                  offset: Offset(0.1, 0.5),
-                                ),
-                              ],
-                            ),
-                            // alignment: Alignment(0.89,0.80),
-                            child: FloatingActionButton(
-                              elevation: 30,
-                              onPressed: ()  {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(builder: (context) => myPostsScreen(title: 'My posts')),);
-                              },
-
-                              child: Icon(Icons.account_circle, size:40 ),
-
-                              backgroundColor: Color(0xff33BDFF),
-
-                            ),
-                          ),
-
-                          //Spacer(),
-                         ],
-                        )
-                       ],
-                      ),
-                    ),
+            Container(
+              decoration: BoxDecoration(
+                color: Color(0xff33BDFF),
+                borderRadius: radius,
+              ),
+              child: Center(
+                child: Text(
+                  "Swip Up to Create a Post",
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontFamily: 'Poppins',
+                    color: Colors.white,
+                  ),
                 ),
-              ],
-           ),
-        );
-     //   },
-     // );
+              ),
+            ),
+
+            // ),
+            minHeight: 50,
+            borderRadius: radius,
+            margin: const EdgeInsets.fromLTRB(30.0, 30.0, 30.0, 0.0),
+
+
+
+            body: Scaffold(
+              resizeToAvoidBottomInset: false,
+              body:
+              GoogleMap(
+
+                mapType: MapType.normal,
+                initialCameraPosition: CameraPosition(
+                    target: LatLng(latitude,longitude) ,
+                    zoom: 12.0,
+                    tilt:0,
+                    bearing: 0),
+                myLocationEnabled: true,
+                myLocationButtonEnabled: false,
+                mapToolbarEnabled: false,
+                zoomControlsEnabled: true,
+                //onMapCreated:_onMapCreated,
+                onMapCreated: (GoogleMapController controller) {
+                  mapController = controller;
+                  mapController.setMapStyle(_mapStyle);
+                  // setState(() {
+                  //   _markers.add(
+                  //       Marker(
+                  //           markerId: MarkerId("1"),
+                  //           position: LatLng(latitude,longitude),
+                  //           icon: pinLocationIcon
+                  //       )
+                  //   );
+                  // });
+                },
+                markers: _markers,
+
+              ),
+              floatingActionButton:Wrap(
+                direction: Axis.horizontal,
+                children: <Widget>[
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      //  Spacer(),
+                      Container(
+                        decoration: BoxDecoration(
+                          color: Colors.transparent,
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(100),
+                          ),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.white.withOpacity(1),
+                              spreadRadius: 3 ,
+                              blurRadius: 0,
+                              offset: Offset(0.1, 0.5),
+                            ),
+                          ],
+                        ),
+                        margin: EdgeInsets.fromLTRB(30, 0, 0, 50),
+                        //alignment: Alignment(-0.75,0.87),
+                        child: FloatingActionButton(
+
+                          elevation: 30,
+                          onPressed: ()  {
+                            mapController.animateCamera(
+                              CameraUpdate.newCameraPosition(
+                                CameraPosition(
+                                    target: LatLng(latitude,longitude) ,zoom: 15.0),),);
+                          },
+                          child: const Icon(Icons.location_on, size: 30),
+                          backgroundColor: Color(0xff33BDFF),
+                        ),
+                      ),
+                      //Spacer(),
+                      Container(
+
+                        margin: EdgeInsets.fromLTRB(0, 0, 0, 50),
+                        decoration: BoxDecoration(
+                          color: Colors.transparent,
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(100),
+                          ),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.white.withOpacity(1),
+                              spreadRadius: 3,
+                              blurRadius: 0,
+                              offset: Offset(0.1, 0.5),
+                            ),
+                          ],
+                        ),
+                        // alignment: Alignment(0.89,0.80),
+
+                        child: FloatingActionButton(
+                          elevation: 30,
+                          onPressed: ()  {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => ChatPage(title: 'Chat page')),);
+                          },
+                          child: const Icon(Icons.chat, size: 30),
+                          backgroundColor: Color(0xff33BDFF),
+
+                        ),
+                      ),
+                      // Spacer(),
+                      Container(
+                        margin: EdgeInsets.fromLTRB(0, 0, 0, 50),
+                        decoration: BoxDecoration(
+                          color: Colors.transparent,
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(100),
+                          ),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.white.withOpacity(1),
+                              spreadRadius: 3,
+                              blurRadius: 0,
+                              offset: Offset(0.1, 0.5),
+                            ),
+                          ],
+                        ),
+                        // alignment: Alignment(0.89,0.80),
+                        child: FloatingActionButton(
+                          elevation: 30,
+                          onPressed: ()  {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => myPostsScreen(title: 'My posts')),);
+                          },
+
+                          child: Icon(Icons.account_circle, size:40 ),
+
+                          backgroundColor: Color(0xff33BDFF),
+
+                        ),
+                      ),
+
+                      //Spacer(),
+                    ],
+                  )
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+    //   },
+    // );
 
   }
 
@@ -532,12 +496,12 @@ class _MainMapScreenState extends State<MainMapScreen> {
     return
       Container(
 
-      margin: EdgeInsets.fromLTRB(30, 30, 30, 10),
-      height: maxLines * 20.0,
-            //
-            // padding: EdgeInsets.only(
-            //     bottom: MediaQuery.of(context).viewInsets.bottom),
-      //child:SingleChildScrollView(
+        margin: EdgeInsets.fromLTRB(30, 30, 30, 10),
+        height: maxLines * 20.0,
+        //
+        // padding: EdgeInsets.only(
+        //     bottom: MediaQuery.of(context).viewInsets.bottom),
+        //child:SingleChildScrollView(
         child: TextField(
           controller: textEditingController,
           maxLines: maxLines,
@@ -554,17 +518,17 @@ class _MainMapScreenState extends State<MainMapScreen> {
 
         ),
 
-      //)
+        //)
 
 
 
 
-    );
+      );
 
   }
 
 
- 
+
 
 
 }
