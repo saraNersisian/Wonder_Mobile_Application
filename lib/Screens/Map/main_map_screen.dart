@@ -34,6 +34,21 @@ class _MainMapScreenState extends State<MainMapScreen> {
   final _database = FirebaseDatabase.instance.reference();
 
 
+  _MainMapScreenState(){
+    _getCurrentLocation();
+    _activeListeners();
+    FirebaseDatabase.instance.reference().child("users").onChildChanged.listen((event) {
+      print("Data changed!");
+      _activeListeners();
+    });
+    FirebaseDatabase.instance.reference().child("users").onChildRemoved.listen((event) {
+      _activeListeners();
+    });
+    FirebaseDatabase.instance.reference().child("users").onChildAdded.listen((event) {
+      _activeListeners();
+    });
+  }
+
   late String _mapStyle; // map style
   @override
   void initState() {
@@ -45,7 +60,7 @@ class _MainMapScreenState extends State<MainMapScreen> {
     //custom map marker
     //setCustomMapPin();
     //loading all markers
-    getCurrentUser();
+     getCurrentUser();
     _activeListeners();
   }
 
@@ -55,20 +70,30 @@ class _MainMapScreenState extends State<MainMapScreen> {
       child: Text("Close"),
       onPressed: () => Navigator.pop(context, true),
     );
-    // Widget replyButton = TextButton(
-    //   child: Text("Reply"),
-    //   onPressed: (){
-    //     Navigator.push(
-    //       context,
-    //       MaterialPageRoute(builder: (context) => ChatPage(title: 'Chat page')),);
-    //   },
-    // );
+    Widget EditButton = TextButton(
+      child: Text("Edit"),
+      onPressed: (){
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => ChatPage(title: 'Chat page')),);
+      },
+    );
+    Widget DeleteButton = TextButton(
+      child: Text("Delete"),
+      onPressed: (){
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => ChatPage(title: 'Chat page')),);
+      },
+    );
     // set up the AlertDialog
     AlertDialog alert = AlertDialog(
       title: Text("I am wondering ..."),
       content: Text(displayThis),
       actions: [
        // replyButton,
+        EditButton,
+        DeleteButton,
         closeButton,
       ],
     );
@@ -94,8 +119,7 @@ class _MainMapScreenState extends State<MainMapScreen> {
 
   }
 
-  CustomInfoWindowController _customInfoWindowController =
-  CustomInfoWindowController();
+
   var post;
   Set<Marker> _markers = {};
   void _activeListeners() {
@@ -103,14 +127,12 @@ class _MainMapScreenState extends State<MainMapScreen> {
     double longitude;
     final db = FirebaseDatabase.instance.reference().child("users");
     db.once().then((DataSnapshot snapshot) {
-
       Map<dynamic, dynamic> values = snapshot.value;
       values.forEach((key, values) async {
         print(key);
         print((values['marker'])["latitude"]);
         print((values['marker'])["longitude"]);
         post = (values['marker'])["posts"];
-
         setState(() {
         _markers.add(
           Marker(
@@ -133,27 +155,6 @@ class _MainMapScreenState extends State<MainMapScreen> {
     });
   }
 
-  //  setState(() {
-  //  //   _markers.add(
-  //  //   //    Marker(
-  //  //   //      //create a custom marker id here
-  //  //   //        markerId: MarkerId("Marker_Id"),
-  //  //   //        position: LatLng(latitude +1,longitude),
-  //  //   //        //icon: pinLocationIcon,
-  //  //   //        onTap: () {
-  //  //   //          showAlertDialog(context);
-  //  //   //        }
-  //  //   //      // infoWindow: InfoWindow(
-  //  //   //      //
-  //  //   //      //   title: displayThis,
-  //  //   //      // ),
-  //  //   //    ),
-  //  //   // );
-  // });
-  // //}
-
-
-
 
 
   // @override
@@ -162,9 +163,7 @@ class _MainMapScreenState extends State<MainMapScreen> {
   //   _getCurrentLocation();
   // }
 
-  _MainMapScreenState() {
-    _getCurrentLocation();
-  }
+
 
   String _locationMessage = "";
   //setting Los Angeles LatLng as an initial position
@@ -222,6 +221,7 @@ class _MainMapScreenState extends State<MainMapScreen> {
     // showModalBottomSheet(
     //     context: context,
     //     builder: (context) {
+
     return Material(
       // child: Column(
       //       children:[
@@ -230,7 +230,8 @@ class _MainMapScreenState extends State<MainMapScreen> {
         children: <Widget>[
           SlidingUpPanel(
             backdropEnabled: true,
-            maxHeight: 200,
+            parallaxEnabled: true,
+            maxHeight: 383,
             panel:
             Center (
               child:Column(
@@ -283,21 +284,7 @@ class _MainMapScreenState extends State<MainMapScreen> {
                           print("Successfully created the marker ");
                         }).catchError((error) {
                           print("Failed to create the marker!");
-
                         });
-
-                        //save the text into firebase
-                        // FirebaseDatabase.instance.reference().child("users/" + user.uid + "/posts")
-                        //     .update({
-                        //    "content" : displayThis.toString(),
-                        // })
-                        //     .then((value){
-                        //   print("Successfully added the text ");
-                        // }).catchError((error) {
-                        //   print("Failed to add the text");
-                        //
-                        // });
-
                       },
                       child: Text(
                         "Post",
@@ -338,9 +325,6 @@ class _MainMapScreenState extends State<MainMapScreen> {
             minHeight: 50,
             borderRadius: radius,
             margin: const EdgeInsets.fromLTRB(30.0, 30.0, 30.0, 0.0),
-
-
-
             body: Scaffold(
               resizeToAvoidBottomInset: false,
               body:
@@ -349,7 +333,7 @@ class _MainMapScreenState extends State<MainMapScreen> {
                 mapType: MapType.normal,
                 initialCameraPosition: CameraPosition(
                     target: LatLng(latitude,longitude) ,
-                    zoom: 12.0,
+                    zoom: 9.0,
                     tilt:0,
                     bearing: 0),
                 myLocationEnabled: true,
