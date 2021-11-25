@@ -32,6 +32,17 @@ class _MainMapScreenState extends State<MainMapScreen> {
   TextStyle style = TextStyle(fontFamily: 'Montserrat', fontSize: 20.0);
   late GoogleMapController mapController;
   final _database = FirebaseDatabase.instance.reference();
+  var textEditingController = TextEditingController();
+  var displayThis; // variable for displaying the users' post
+  var currentUserId;
+  var post; //users' post
+  late String _mapStyle; // map style
+  void _onMapCreated(GoogleMapController controller){ }
+  Set<Marker> _markers = {};
+  String _locationMessage = "";
+  //setting Los Angeles LatLng as an initial position
+  double latitude = 34.052235;
+  double longitude =  -118.243683;
 
 
   _MainMapScreenState(){
@@ -49,7 +60,7 @@ class _MainMapScreenState extends State<MainMapScreen> {
     });
   }
 
-  late String _mapStyle; // map style
+
   @override
   void initState() {
     super.initState();
@@ -59,11 +70,12 @@ class _MainMapScreenState extends State<MainMapScreen> {
     });
     //custom map marker
     //setCustomMapPin();
-    //loading all markers
      getCurrentUser();
+     //for loading all the markers
     _activeListeners();
   }
 
+  //dialog box for displaying the users' post
   showAlertDialog(BuildContext context) {
     // set up the button
     Widget closeButton = TextButton(
@@ -106,9 +118,6 @@ class _MainMapScreenState extends State<MainMapScreen> {
     );
   }
 
-
-  var currentUserId ;
-
   //getting current user
   final FirebaseAuth _auth = FirebaseAuth.instance;
   getCurrentUser() async {
@@ -116,15 +125,10 @@ class _MainMapScreenState extends State<MainMapScreen> {
     final uid = user.uid;
     print(uid);
     currentUserId = uid;
+    }
 
-  }
-
-
-  var post;
-  Set<Marker> _markers = {};
+    //loading data from firebase
   void _activeListeners() {
-    double latitude;
-    double longitude;
     final db = FirebaseDatabase.instance.reference().child("users");
     db.once().then((DataSnapshot snapshot) {
       Map<dynamic, dynamic> values = snapshot.value;
@@ -144,36 +148,19 @@ class _MainMapScreenState extends State<MainMapScreen> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) => ChatPage(title: 'Chat page')),);
-                }
+                 }
                ),
               ),
-        ); //_markers.add
+         ); //_markers.add
         print("------------------------");
-      }
+       }
       );
      });
     });
   }
 
-
-
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   _getCurrentLocation();
-  // }
-
-
-
-  String _locationMessage = "";
-  //setting Los Angeles LatLng as an initial position
-  double latitude = 34.052235;
-  double longitude =  -118.243683;
-
   void _getCurrentLocation() async {
     final position = await Geolocator.getCurrentPosition( desiredAccuracy: LocationAccuracy.low, forceAndroidLocationManager: true);
-    // print("-----------------------------------");
-    // print(position);
     latitude = position.latitude;
     longitude = position.longitude;
     setState(() {
@@ -182,49 +169,13 @@ class _MainMapScreenState extends State<MainMapScreen> {
   }
 
 
-  // Set<Marker> _markers = {};
-  //  late BitmapDescriptor pinLocationIcon;
-  //
-  //
-  // //putting a marker
-  //  void setCustomMapPin() async{
-  //    pinLocationIcon = BitmapDescriptor.fromAssetImage(
-  //        ImageConfiguration(devicePixelRatio: 2.5),
-  //        'assets/orange-map-marker').then((onValue) {
-  //    }) as BitmapDescriptor;
-  //
-  // }
-
-  var textEditingController = TextEditingController();
-  var displayThis;
-
-  void _onMapCreated(GoogleMapController controller){
-
-  }
-
-
-
-
-
   @override
-
   Widget build( BuildContext context) {
-
     BorderRadiusGeometry radius = BorderRadius.only(
       topLeft: Radius.circular(100.0),
       topRight: Radius.circular(100.0),
     );
-
-    // return GestureDetector(
-    //   onTap:()=>FocusScope.of(context).unfocus(),
-    //   child: Material(
-    // showModalBottomSheet(
-    //     context: context,
-    //     builder: (context) {
-
     return Material(
-      // child: Column(
-      //       children:[
       child: Stack(
         alignment: Alignment.topCenter,
         children: <Widget>[
@@ -241,7 +192,6 @@ class _MainMapScreenState extends State<MainMapScreen> {
                     width: 200,   //post button width
                     child:
                     ElevatedButton(
-
                       style: ElevatedButton.styleFrom(
                         shape: new RoundedRectangleBorder(
                           borderRadius: new BorderRadius.circular(100.0),
@@ -271,7 +221,6 @@ class _MainMapScreenState extends State<MainMapScreen> {
                             ),
                           );
                         });
-
                         //saving current marker into firebase
                         FirebaseUser user = await FirebaseAuth.instance.currentUser();
                         FirebaseDatabase.instance.reference().child("users/" + user.uid + "/marker")
@@ -300,10 +249,6 @@ class _MainMapScreenState extends State<MainMapScreen> {
               ),
             ),
             collapsed:
-            // SingleChildScrollView(
-            //     reverse: true,  // add this line in scroll view
-            //     child:
-
             Container(
               decoration: BoxDecoration(
                 color: Color(0xff33BDFF),
@@ -320,8 +265,6 @@ class _MainMapScreenState extends State<MainMapScreen> {
                 ),
               ),
             ),
-
-            // ),
             minHeight: 50,
             borderRadius: radius,
             margin: const EdgeInsets.fromLTRB(30.0, 30.0, 30.0, 0.0),
@@ -329,7 +272,6 @@ class _MainMapScreenState extends State<MainMapScreen> {
               resizeToAvoidBottomInset: false,
               body:
               GoogleMap(
-
                 mapType: MapType.normal,
                 initialCameraPosition: CameraPosition(
                     target: LatLng(latitude,longitude) ,
@@ -344,18 +286,8 @@ class _MainMapScreenState extends State<MainMapScreen> {
                 onMapCreated: (GoogleMapController controller) {
                   mapController = controller;
                   mapController.setMapStyle(_mapStyle);
-                  // setState(() {
-                  //   _markers.add(
-                  //       Marker(
-                  //           markerId: MarkerId("1"),
-                  //           position: LatLng(latitude,longitude),
-                  //           icon: pinLocationIcon
-                  //       )
-                  //   );
-                  // });
                 },
                 markers: _markers,
-
               ),
               floatingActionButton:Wrap(
                 direction: Axis.horizontal,
@@ -382,7 +314,6 @@ class _MainMapScreenState extends State<MainMapScreen> {
                         margin: EdgeInsets.fromLTRB(30, 0, 0, 50),
                         //alignment: Alignment(-0.75,0.87),
                         child: FloatingActionButton(
-
                           elevation: 30,
                           onPressed: ()  {
                             mapController.animateCamera(
@@ -396,7 +327,6 @@ class _MainMapScreenState extends State<MainMapScreen> {
                       ),
                       //Spacer(),
                       Container(
-
                         margin: EdgeInsets.fromLTRB(0, 0, 0, 50),
                         decoration: BoxDecoration(
                           color: Colors.transparent,
@@ -413,7 +343,6 @@ class _MainMapScreenState extends State<MainMapScreen> {
                           ],
                         ),
                         // alignment: Alignment(0.89,0.80),
-
                         child: FloatingActionButton(
                           elevation: 30,
                           onPressed: ()  {
@@ -423,7 +352,6 @@ class _MainMapScreenState extends State<MainMapScreen> {
                           },
                           child: const Icon(Icons.chat, size: 30),
                           backgroundColor: Color(0xff33BDFF),
-
                         ),
                       ),
                       // Spacer(),
@@ -451,14 +379,10 @@ class _MainMapScreenState extends State<MainMapScreen> {
                               context,
                               MaterialPageRoute(builder: (context) => myPostsScreen(title: 'My posts')),);
                           },
-
                           child: Icon(Icons.account_circle, size:40 ),
-
                           backgroundColor: Color(0xff33BDFF),
-
                         ),
                       ),
-
                       //Spacer(),
                     ],
                   )
@@ -469,17 +393,12 @@ class _MainMapScreenState extends State<MainMapScreen> {
         ],
       ),
     );
-    //   },
-    // );
-
   }
 
   Widget _buildTextField() {
     final maxLines = 5;
-
     return
       Container(
-
         margin: EdgeInsets.fromLTRB(30, 30, 30, 10),
         height: maxLines * 20.0,
         //
@@ -494,25 +413,12 @@ class _MainMapScreenState extends State<MainMapScreen> {
               borderRadius: BorderRadius.circular(100.0),
               borderSide: BorderSide.none,
             ),
-
             labelText: "Enter a message ...",
             fillColor: Color(0xffDDF4FF),
             filled: true,
           ),
-
         ),
-
-        //)
-
-
-
-
       );
+    }
 
-  }
-
-
-
-
-
-}
+}//end of class
