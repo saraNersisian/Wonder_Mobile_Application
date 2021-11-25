@@ -26,7 +26,7 @@ import 'package:uuid/uuid.dart';
 //     );
 //   }
 // }
-
+//
 class ChatPage extends StatefulWidget {
   ChatPage({Key? key,  required this.title}) : super(key: key);
   final String title;
@@ -53,13 +53,14 @@ class _ChatPageState extends State<ChatPage> {
 
 
   //the current user should be placed here
- final _user = const types.User(id: '06c33e8b-e835-4736-80f4-63f44b66666c');
+ final _user = const types.User(id:"SR7Z4qYbFEPXTelucOyTTHoiI433");
   //final _user =  types.User(id:currentUserId.toString());
 
   @override
   void initState() {
     super.initState();
     _loadMessages();
+    print(_user.toString());
   }
 
   void _addMessage(types.Message message) {
